@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../../components/Button/Button.jsx";
+import Counter from "../../../components/Counter/Counter.jsx";
 
 export default function Product({title, price, image}) {
     return (
@@ -12,6 +13,7 @@ export default function Product({title, price, image}) {
                 <Button className="max-w-[90px] text-center">
                     افزودن
                 </Button>
+                <Counter></Counter>
             </div>
             <div className="w-1/2 h-full">
                 <img
