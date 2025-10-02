@@ -1,0 +1,7 @@
+@import url('/vazirmatn/misc/UI-Farsi-Digits/Vazirmatn-UI-FD-font-face.css');
+
+html,
+body,
+#root {
+    font-family: "Vazirmatn UI FD", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
