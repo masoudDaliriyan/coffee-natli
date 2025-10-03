@@ -5,12 +5,14 @@ const BasketContext = createContext();
 export function BasketProvider({ children }) {
     const [items, setItems] = useState([]);
 
-    const getItems = useCallback(() => items, [items]);
+    // Get all items
+    const getItems = () => items;
 
-    const getItem = useCallback((itemId) =>
-        items.find(item => item.id === itemId), [items]);
+    // Get single item by id
+    const getItem = (itemId) => items.find(item => item.id === itemId);
 
-    const addItem = useCallback((newItem) => {
+    // Add or update item
+    const addItem = (newItem) => {
         setItems(currentItems => {
             const existingItem = currentItems.find(item => item.id === newItem.id);
             if (!existingItem) return [...currentItems, { ...newItem, quantity: newItem.quantity || 1 }];
@@ -21,20 +23,29 @@ export function BasketProvider({ children }) {
                     : item
             );
         });
-    }, []);
+    };
 
-    const removeItem = useCallback((itemId) =>
-        setItems(currentItems => currentItems.filter(item => item.id !== itemId)), []);
+    // Remove item
+    const removeItem = (itemId) => {
+        setItems(currentItems => currentItems.filter(item => item.id !== itemId));
+    };
 
-    const clearBasket = useCallback(() => setItems([]), []);
+    // Clear basket
+    const clearBasket = () => setItems([]);
 
-    const updateQuantity = useCallback((itemId, newQuantity) =>
+    // Update quantity
+    const updateQuantity = (itemId, newQuantity) => {
         setItems(currentItems =>
             currentItems.map(item =>
                 item.id === itemId ? { ...item, quantity: newQuantity } : item
             )
-        ), []);
+        );
+    };
 
+    // Check if item exists
+    const isItemExist = (id) => items.some(item => item.id === id);
+
+    // Computed values
     const basketTotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
     const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
@@ -47,7 +58,8 @@ export function BasketProvider({ children }) {
         clearBasket,
         updateQuantity,
         basketTotal,
-        itemCount
+        itemCount,
+        isItemExist
     };
 
     return (

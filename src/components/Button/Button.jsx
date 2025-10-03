@@ -1,7 +1,6 @@
 import React from "react";
 
 const Button = ({
-                    onClick,
                     children,
                     className = "",
                     variant = "primary", // "primary" | "secondary"
@@ -21,7 +20,6 @@ const Button = ({
 
     return (
         <button
-            onClick={onClick}
             className={`${baseStyles} ${variantStyles} ${className}`}
             {...props}
         >

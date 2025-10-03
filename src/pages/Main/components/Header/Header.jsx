@@ -10,11 +10,7 @@ export default function Header()
     return (
         <>
             <div
-                className="p-4 flex items-center gap-2 justify-between"
-                style={ {
-                    backgroundImage: `radial-gradient(circle, #fff, rgba(255, 255, 255, 0.1)), url(/icons/img.png)`,
-                } }
-            >
+                className="p-4 flex items-center gap-2 justify-between">
                 <div className="flex">
                     <Button onClick={ toggleSidebar }>
                         <img
@@ -30,7 +26,7 @@ export default function Header()
                     <img src="/icons/logo.jpg" alt="لوگو" />
                 </Link>
             </div>
-            <div className="flex p-4">
+            <div className="flex px-4">
                 <Link to="/basket" className="ml-2">
                     <Button variant="secondary">سبد خرید</Button></Link>
                 <Link to="/login" className="ml-2">

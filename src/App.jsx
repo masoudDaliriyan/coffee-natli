@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login.jsx";
 import { BasketProvider } from "./context/BasketContex.jsx";
 import Signup from "./pages/SignUp/Signup.jsx";
 import Orders from "./pages/Orders/Order.jsx";
+import OTP from "./pages/OTP/OTP.jsx";
 
 function App()
 {
@@ -30,6 +31,7 @@ function App()
                         <Route path="/login/" element={ <Login /> } />
                         <Route path="/signup/" element={ <Signup /> } />
                         <Route path="/orders" element={ <Orders /> } />
+                        <Route path="/otp" element={ <OTP /> } />
                     </Routes>
                 </Router>
             </BasketProvider>
