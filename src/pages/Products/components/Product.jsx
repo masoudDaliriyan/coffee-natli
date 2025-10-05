@@ -68,7 +68,7 @@ export default function Product({data}) {
             </div>
             <div className="w-1/2 h-full">
                 <img
-                    src={data.image}
+                    src={'https://www.natli.ir/upload/prod/md/'+data.thumbnail+'.jpg'}
                     className="w-auto h-[160px] object-cover rounded-lg"
                 />
             </div>

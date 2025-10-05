@@ -43,7 +43,6 @@ const Login = ({ onLogin }) =>
                             className="text-right"
                         />
                     </div>
-
                     <div>
                         <label className="block text-sm font-medium mb-1">رمز عبور</label>
                         <TextInput

@@ -11,6 +11,7 @@ import { BasketProvider } from "./context/BasketContex.jsx";
 import Signup from "./pages/SignUp/Signup.jsx";
 import Orders from "./pages/Orders/Order.jsx";
 import OTP from "./pages/OTP/OTP.jsx";
+import {ProductProvider} from "./context/ProductContext.jsx";
 
 function App()
 {
@@ -19,21 +20,23 @@ function App()
     return (
         <SidebarProvider>
             <BasketProvider>
-                <Router>
-                    <Sidebar
-                        isOpen={ isSidebarOpen }
-                        onClose={ () => setIsSidebarOpen(false) }
-                    />
-                    <Routes>
-                        <Route path="/" element={ <Products /> } />
-                        <Route path="/products/:id" element={ <ProductDetails /> } />
-                        <Route path="/basket/" element={ <Basket /> } />
-                        <Route path="/login/" element={ <Login /> } />
-                        <Route path="/signup/" element={ <Signup /> } />
-                        <Route path="/orders" element={ <Orders /> } />
-                        <Route path="/otp" element={ <OTP /> } />
-                    </Routes>
-                </Router>
+                <ProductProvider>
+                    <Router>
+                        <Sidebar
+                            isOpen={ isSidebarOpen }
+                            onClose={ () => setIsSidebarOpen(false) }
+                        />
+                        <Routes>
+                            <Route path="/" element={ <Products /> } />
+                            <Route path="/products/:id" element={ <ProductDetails /> } />
+                            <Route path="/basket/" element={ <Basket /> } />
+                            <Route path="/login/" element={ <Login /> } />
+                            <Route path="/signup/" element={ <Signup /> } />
+                            <Route path="/orders" element={ <Orders /> } />
+                            <Route path="/otp" element={ <OTP /> } />
+                        </Routes>
+                    </Router>
+                </ProductProvider>
             </BasketProvider>
         </SidebarProvider>
     );

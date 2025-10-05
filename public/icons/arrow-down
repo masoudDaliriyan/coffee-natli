@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevrons-down">
+  <path d="M7 7l5 5l5 -5"></path>
+  <path d="M7 13l5 5l5 -5"></path>
+  <style>
+    @keyframes chevron-down-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    .tabler-icon-chevrons-down path {
+      animation: chevron-down-bounce 1.2s ease-in-out infinite;
+    }
+
+    /* Offset the second chevron to create a staggered bounce */
+    .tabler-icon-chevrons-down path:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+  </style>
+</svg>
