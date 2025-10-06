@@ -5,13 +5,10 @@ const BasketContext = createContext();
 export function BasketProvider({ children }) {
     const [items, setItems] = useState([]);
 
-    // Get all items
     const getItems = () => items;
 
-    // Get single item by id
     const getItem = (itemId) => items.find(item => item.id === itemId);
 
-    // Add or update item
     const addItem = (newItem) => {
         setItems(currentItems => {
             const existingItem = currentItems.find(item => item.id === newItem.id);
@@ -25,15 +22,12 @@ export function BasketProvider({ children }) {
         });
     };
 
-    // Remove item
     const removeItem = (itemId) => {
         setItems(currentItems => currentItems.filter(item => item.id !== itemId));
     };
 
-    // Clear basket
     const clearBasket = () => setItems([]);
 
-    // Update quantity
     const updateQuantity = (itemId, newQuantity) => {
         setItems(currentItems =>
             currentItems.map(item =>
@@ -42,10 +36,8 @@ export function BasketProvider({ children }) {
         );
     };
 
-    // Check if item exists
     const isItemExist = (id) => items.some(item => item.id === id);
 
-    // Computed values
     const basketTotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
     const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
