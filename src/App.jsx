@@ -1,40 +1,36 @@
 import './App.css';
+import { useEffect, useState } from "react";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+    useNavigate
+} from "react-router-dom";
+
+// pages
 import Products from './pages/Products/Products.jsx';
-import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
-import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ProductDetails } from "./pages/Product/ProductDetail.jsx";
-import { SidebarProvider } from "./context/SidebarContext.jsx";
 import Basket from "./pages/Basket/Basket.jsx";
-import Login from "./pages/Login/Login.jsx";
-import { BasketProvider } from "./context/BasketContex.jsx";
-import Signup from "./pages/SignUp/Signup.jsx";
 import Orders from "./pages/Orders/Order.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Signup from "./pages/SignUp/Signup.jsx";
 import OTP from "./pages/OTP/OTP.jsx";
-import {ProductProvider} from "./context/ProductContext.jsx";
 
-function App()
-{
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+// components & context
+import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
+import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
+import { SidebarProvider } from "./context/SidebarContext.jsx";
+import { BasketProvider } from "./context/BasketContex.jsx";
+import { ProductProvider } from "./context/ProductContext.jsx";
 
+function AppWrapper() {
     return (
         <SidebarProvider>
             <BasketProvider>
                 <ProductProvider>
                     <Router>
-                        <Sidebar
-                            isOpen={ isSidebarOpen }
-                            onClose={ () => setIsSidebarOpen(false) }
-                        />
-                        <Routes>
-                            <Route path="/" element={ <Products /> } />
-                            <Route path="/products/:id" element={ <ProductDetails /> } />
-                            <Route path="/basket/" element={ <Basket /> } />
-                            <Route path="/login/" element={ <Login /> } />
-                            <Route path="/signup/" element={ <Signup /> } />
-                            <Route path="/orders" element={ <Orders /> } />
-                            <Route path="/otp" element={ <OTP /> } />
-                        </Routes>
+                        <App />
                     </Router>
                 </ProductProvider>
             </BasketProvider>
@@ -42,4 +38,38 @@ function App()
     );
 }
 
-export default App;
+function App() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const location = useLocation();
+
+    // If we navigated with a background state, save it
+    const state = location.state && location.state.background;
+
+    return (
+        <>
+            <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+            />
+            <Products />
+            <Routes >
+                <Route path="/products/:id" element={<ProductDetails />} />
+                <Route path="/basket" element={<Basket />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/otp" element={<OTP />} />
+                <Route path="/login" element={<ModalRoute><Login /></ModalRoute>} />
+            </Routes>
+
+            {/* Modal routes (only if navigated with background) */}
+            {state && (
+                <Routes>
+                    <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
+                    <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
+                </Routes>
+            )}
+        </>
+    );
+}
+
+export default AppWrapper;
