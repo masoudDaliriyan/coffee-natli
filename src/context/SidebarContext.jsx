@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {createContext, useContext, useState} from "react";
 
 // Create a Sidebar Context
 const SidebarContext = createContext();
@@ -9,6 +9,7 @@ export function SidebarProvider({ children }) {
     const [activeItem, setActiveItem] = useState(null);
 
     const toggleSidebar = () => setIsOpen(prev => !prev);
+
 
     return (
         <SidebarContext.Provider value={{ isOpen, toggleSidebar, activeItem, setActiveItem }}>

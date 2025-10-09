@@ -20,21 +20,13 @@ import OTP from "./pages/OTP/OTP.jsx";
 // components & context
 import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
 import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
-import { SidebarProvider } from "./context/SidebarContext.jsx";
-import { BasketProvider } from "./context/BasketContex.jsx";
-import { ProductProvider } from "./context/ProductContext.jsx";
+import SearchableProductList from "./pages/Search/Search.jsx";
 
 function AppWrapper() {
     return (
-        <SidebarProvider>
-            <BasketProvider>
-                <ProductProvider>
-                    <Router>
-                        <App />
-                    </Router>
-                </ProductProvider>
-            </BasketProvider>
-        </SidebarProvider>
+        <Router>
+            <App />
+        </Router>
     );
 }
 
@@ -54,14 +46,13 @@ function App() {
             <Products />
             <Routes >
                 <Route path="/products/:id" element={<ProductDetails />} />
-                <Route path="/basket" element={<Basket />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/otp" element={<OTP />} />
+                <Route path="/orders" element={<ModalRoute><Orders /></ModalRoute>} />
+                <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
+                <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
                 <Route path="/login" element={<ModalRoute><Login /></ModalRoute>} />
+                <Route path="/basket" element={<ModalRoute><Basket /></ModalRoute>} />
+                <Route path="/search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
             </Routes>
-
-            {/* Modal routes (only if navigated with background) */}
             {state && (
                 <Routes>
                     <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />

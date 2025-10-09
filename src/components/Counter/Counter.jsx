@@ -1,26 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function Counter({ id, quantity = 1, onChange }) {
-    const [value, setValue] = useState(quantity);
-
     const update = (newValue) => {
         const safe = Math.max(newValue, 1);
-        setValue(safe);
-        onChange?.(id, safe);
+        onChange?.(id, safe); // always delegate change up
     };
 
     return (
         <div className="flex items-center gap-2">
             <button
                 className="bg-gray-300 px-2 py-1 rounded"
-                onClick={() => update(value + 1)}
+                onClick={() => update(quantity + 1)}
             >
                 +
             </button>
-            <span>{value}</span>
+            <span>{quantity}</span>
             <button
                 className="bg-gray-300 px-2 py-1 rounded"
-                onClick={() => update(value - 1)}
+                onClick={() => update(quantity - 1)}
             >
                 -
             </button>

@@ -4,13 +4,13 @@ import {getProducts} from "../api/api.js";
 // 1. Create the context
 const ProductContext = createContext();
 
-// 2. Context provider component
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
+        console.log('hello')
         getProducts()
             .then((data) => {
                 setProducts(data.data.data);

@@ -26,7 +26,6 @@ const Signup = () =>
 
     return (
         <>
-            <Header></Header>
             <form
                 onSubmit={ handleSubmit }
                 className="bg-white p-6 rounded-2xl  w-full space-y-4"

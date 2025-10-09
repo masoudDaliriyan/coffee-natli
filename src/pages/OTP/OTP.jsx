@@ -137,7 +137,6 @@ export default function OTP({ onSubmit }) {
 
     return (
         <>
-            <Header />
             {step === "phone" ? renderPhoneStep() : renderOtpStep()}
         </>
     );
