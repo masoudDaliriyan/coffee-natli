@@ -48,7 +48,7 @@ function App() {
                 <Route path="/products/:id" element={<ProductDetails />} />
                 <Route path="/orders" element={<ModalRoute><Orders /></ModalRoute>} />
                 <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
-                <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
+                <Route path="/otp/:mobile" element={<ModalRoute><OTP /></ModalRoute>} />
                 <Route path="/login" element={<ModalRoute><Login /></ModalRoute>} />
                 <Route path="/basket" element={<ModalRoute><Basket /></ModalRoute>} />
                 <Route path="/search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />

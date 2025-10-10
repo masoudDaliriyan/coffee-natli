@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { login as apiLogin, logout as apiLogout, register as apiRegister } from "../services/api";
+import { login as apiLogin, logout as apiLogout, register as apiRegister, verify as apiVerifyOtp } from "../services/api";
 
 const AuthContext = createContext();
 
@@ -9,23 +9,40 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (token) setUser({ token }); // optionally fetch user profile from backend
+        if (token) {
+            setUser({ token });
+            localStorage.setItem("jwt", token);
+        } else {
+            localStorage.removeItem("jwt");
+        }
     }, [token]);
 
-    const login = useCallback(async (mobile, password, captcha = "") => {
+    const login = useCallback(async ({ mobile, password, captcha = "" }) => {
         setLoading(true);
         try {
-            const data = await apiLogin({ mobile, password, captcha });
-            setToken(data.jwt);
-            setUser(data.user || { mobile });
+            const res = await apiLogin({ mobile, password, captcha });
+
+            if (res.token) {
+                setToken(res.token);
+                setUser({
+                    mobile: res.mobile,
+                    fname: res.fname,
+                    lname: res.lname,
+                });
+
+                localStorage.setItem("jwt", res.token);
+                setLoading(false);
+                return { success: true, data: res.data };
+            }
+
             setLoading(false);
-            return { success: true, data };
+            return { success: false, message: res.message || "خطا در ورود" };
         } catch (err) {
-            console.error(err);
             setLoading(false);
             return { success: false, message: err.message };
         }
     }, []);
+
 
     const logout = useCallback(() => {
         apiLogout();
@@ -40,14 +57,37 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
             return { success: true, data };
         } catch (err) {
-            console.error(err);
             setLoading(false);
             return { success: false, message: err.message };
         }
     }, []);
 
+    const verifyOtp = useCallback(async ({ mobile, verify }) => {
+        setLoading(true);
+        try {
+            const data = await apiVerifyOtp({ mobile, verify });
+            setLoading(false);
+            return data; // {status:1,...} as API returns
+        } catch (err) {
+            setLoading(false);
+            return { status: 0, message: err.message };
+        }
+    }, []);
+
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, register, loading, isAuthenticated: !!token }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                token,
+                login,
+                logout,
+                register,
+                verifyOtp,
+                setToken,
+                loading,
+                isAuthenticated: !!token,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

@@ -1,22 +1,35 @@
 import React, { useState } from "react";
 import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
+import { useAuth } from "../../context/AuthContext.jsx"; // import the auth context
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ onLogin }) => {
-    const [email, setEmail] = useState("");
+const Login = () => {
+    const { login, loading } = useAuth();
+    const navigate = useNavigate();
+
+    const [mobile, setMobile] = useState(""); // use mobile (API requires this)
     const [password, setPassword] = useState("");
+    const [captcha, setCaptcha] = useState("");
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
-        if (!email || !password) {
-            setError("ایمیل و رمز عبور الزامی است.");
+        if (!mobile || !password) {
+            setError("شماره موبایل و رمز عبور الزامی است.");
             return;
         }
 
-        onLogin?.(email, password);
+        const res = await login({mobile, password, captcha});
+
+        if (res.success) {
+            navigate("/");
+            document.body.style.overflow = "auto";
+        } else {
+            setError(res.message || "ورود ناموفق بود.");
+        }
     };
 
     return (
@@ -31,11 +44,11 @@ const Login = ({ onLogin }) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium mb-1">ایمیل</label>
+                    <label className="block text-sm font-medium mb-1">شماره موبایل</label>
                     <TextInput
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="example@domain.com"
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
+                        placeholder="مثلاً 09121112233"
                         className="text-right w-full"
                     />
                 </div>
@@ -50,8 +63,19 @@ const Login = ({ onLogin }) => {
                         className="text-right w-full"
                     />
                 </div>
-                <Button type="submit" className="w-full">
-                    ورود
+
+                <div>
+                    <label className="block text-sm font-medium mb-1">کپچا (در صورت نیاز)</label>
+                    <TextInput
+                        value={captcha}
+                        onChange={(e) => setCaptcha(e.target.value)}
+                        placeholder="کد کپچا"
+                        className="text-right w-full"
+                    />
+                </div>
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "در حال ورود..." : "ورود"}
                 </Button>
             </form>
         </div>

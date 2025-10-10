@@ -7,9 +7,9 @@ export default function ModalRoute({ children }) {
 
     const handleClose = () => {
         if (location.state && location.state.background) {
-            navigate(-1); // go back to background page
+            navigate(-1);
         } else {
-            navigate("/", { replace: true }); // fallback to main page
+            navigate("/", { replace: true });
         }
 
         window.scrollTo({ top: 0, behavior: "smooth" });
