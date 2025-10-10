@@ -53,7 +53,6 @@ export default function Product({ data }) {
                                 quantity={basketItem?.quantity || 1}
                                 onChange={(id, newQty) => updateQuantity(id, newQty)}
                             />
-
                         </>
                     )}
                 </div>

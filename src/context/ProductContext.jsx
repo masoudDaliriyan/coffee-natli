@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import {getProducts} from "../api/api.js";
+import {getProducts} from "../services/api.js";
 
 // 1. Create the context
 const ProductContext = createContext();
@@ -10,10 +10,9 @@ export const ProductProvider = ({ children }) => {
 
 
     useEffect(() => {
-        console.log('hello')
         getProducts()
             .then((data) => {
-                setProducts(data.data.data);
+                setProducts(data);
                 setLoading(false);
             })
             .catch((err) => {

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import Header from "../Main/components/Header/Header.jsx";
 import { Link } from "react-router-dom";
 import MainContainer from "../Main/components/MainContainer/MainComponent.jsx";
@@ -12,9 +12,11 @@ import ProductList from "./components/ProductList.jsx";
 
 export default function ProductsList() {
     const { products, loading } = useProducts();
-    const { itemCount } = useBasket();
     const { activeItem } = useSidebar();
 
+    useEffect(() => {
+        console.log(products)
+    }, [products]);
     // Create a ref for the product list container
     const productListRef = useRef(null);
 

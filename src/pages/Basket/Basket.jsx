@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../Main/components/Header/Header.jsx";
 import { useBasket } from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
+import Button from "../../components/Button/Button.jsx";
 
 export default function Basket()
 {
@@ -51,9 +52,15 @@ export default function Basket()
                                             className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
                                         />
                                         <div className="flex flex-col flex-1 text-right">
-                                            <div className="text-base font-semibold">{item.title}</div>
-                                            <div className="text-gray-600 text-sm mt-1">
-                                                ${ (item.price * item.quantity).toFixed(2) }
+                                            <div className="text-base font-semibold mb-2">{item.title}</div>
+                                            <div className="text-gray-600 text-sm mt-1 mb-2">
+                                                <span>
+                                                    {Number(item.price * item.quantity)
+                                                        .toLocaleString("fa-IR")}
+                                                </span>
+                                                <span>
+                                                    تومان
+                                                </span>
                                             </div>
                                             <div className="mt-2">
                                                 <Counter
@@ -76,7 +83,14 @@ export default function Basket()
                                 </div>
                             ))}
                         </div>
-                        <p className="mt-2 font-bold">مجموع: ${ basketTotal.toFixed(2) }</p>
+                        <Button className="w-full py-4 flex justify-center" variant="success">
+                            <span>
+                                  {basketTotal?.toLocaleString("fa-IR")}&nbsp;تومان
+                            </span>
+                            <span>
+                                پرداخت
+                            </span>
+                        </Button>
                     </>
                 ) }
             </div>

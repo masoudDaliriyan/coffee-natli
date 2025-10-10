@@ -12,11 +12,13 @@ const Button = ({
     let variantStyles = "";
 
     if (variant === "primary") {
-        variantStyles = "bg-[#fff] hover:bg-blue-600  border-gray-300";
+        variantStyles = "bg-white border-gray-300 text-black";
     } else if (variant === "secondary") {
-        variantStyles =
-            "text-[#fff] border-[#3fbbbd] bg-[#292524] ";
+        variantStyles = "bg-gray-900 border-gray-500 text-white";
+    } else if (variant === "success") {
+        variantStyles = "bg-green-600 border-green-800 text-white";
     }
+
 
     return (
         <button
