@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
             }
 
             setLoading(false);
+
             return { success: false, message: res.message || "خطا در ورود" };
         } catch (err) {
             setLoading(false);

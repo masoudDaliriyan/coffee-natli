@@ -31,7 +31,7 @@ const BottomSheet = ({ initialOpen, onClose, children }) => {
         <div
             className="fixed inset-0 z-50  justify-center bg-black/40 flex over ">
             <div
-                className={`w-full overflow-y-auto max-w-md bg-white rounded-t-2xl shadow-lg transform transition-transform duration-300 ease-out mt-[10vh] 
+                className={`w-full overflow-y-auto max-w-md bg-white rounded-t-2xl shadow-lg transform transition-transform duration-300 ease-out mt-[10vh] will-change-transform
                 ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
                 onClick={(e) => e.stopPropagation()} >
                 <div className="h-1 w-12 bg-gray-300 rounded-full mx-auto my-4">
