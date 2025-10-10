@@ -40,7 +40,7 @@ const BottomSheet = ({ initialOpen, onClose, children }) => {
                 <div className="w-full absolute top-3">
                     <button
                         onClick={onCloseBottomSheet}
-                        className="p-1 hover:bg-gray-100 rounded transition-colors"
+                        className="hover:bg-gray-100 rounded transition-colors p-4"
                         aria-label="بستن منو"
                     >
                         <img src="/icons/close.svg" alt="بستن" className="w-6 h-6" />

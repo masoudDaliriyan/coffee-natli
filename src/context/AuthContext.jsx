@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
 
+
     const logout = useCallback(() => {
         apiLogout();
         setUser(null);
