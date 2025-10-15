@@ -26,7 +26,7 @@ const handleResponse = (res) => {
         window.location.href = "/login";
         throw new Error("Session expired");
     }
-    if (data.status === 0) throw new Error(data.message || "Request failed");
+    // if (data.status === 0) throw new Error(data.message || "Request failed");
     return data.data;
 };
 
@@ -74,5 +74,25 @@ export const getBranchStatus = async () => {
 
 export const test = async (temp = "") => {
     const res = await api.post(`/test/${BRANCH}`, { temp });
+    return handleResponse(res);
+};
+
+export const orderCheck = async (payload) => {
+    const res = await api.post(`/checkOrder/${BRANCH}`, payload);
+    return handleResponse(res);
+};
+
+export const orderAdd = async (payload) => {
+    const res = await api.post(`/addOrder/${BRANCH}`, payload);
+    return handleResponse(res);
+};
+
+export const myOrders = async () => {
+    const res = await api.post(`/myOrders/${BRANCH}`);
+    return handleResponse(res);
+};
+
+export const payOrder = async (orderId) => {
+    const res = await api.post(`/payOrder/${BRANCH}`, { orderId });
     return handleResponse(res);
 };

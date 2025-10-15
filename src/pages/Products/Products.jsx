@@ -14,10 +14,7 @@ export default function ProductsList() {
     const { products, loading } = useProducts();
     const { activeItem } = useSidebar();
 
-    useEffect(() => {
-        console.log(products)
-    }, [products]);
-    // Create a ref for the product list container
+
     const productListRef = useRef(null);
 
     if (loading) return <div>Loading...</div>;

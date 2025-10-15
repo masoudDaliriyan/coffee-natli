@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import Header from "../Main/components/Header/Header.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useBasket } from "../../context/BasketContex.jsx";
 

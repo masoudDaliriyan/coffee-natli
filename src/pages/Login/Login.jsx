@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the auth context
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Login = () => {
     const { login, loading } = useAuth();
@@ -73,7 +73,11 @@ const Login = () => {
                         className="text-right w-full"
                     />
                 </div>
-
+                <Link to="/reset">
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        فراموشی رمز عبور
+                    </Button>
+                </Link>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "در حال ورود..." : "ورود"}
                 </Button>

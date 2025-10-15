@@ -1,39 +1,25 @@
-import React from "react";
-import Header from "../Main/components/Header/Header.jsx";
+import React, { useEffect, useState } from "react";
+import { myOrders, payOrder } from "../../services/api.js"; // <-- import your API functions
 
 export default function Orders() {
-    const orders = [
-        {
-            id: 1,
-            orderNumber: "ORD-78945",
-            date: "۱۴۰۲/۱۰/۱۵",
-            status: "تحویل شده",
-            items: [
-                { id: 1, title: "باقلوا", price: 12.99, quantity: 2, image: "/products/1.jpg" },
-                { id: 4, title: "نان خامه ای", price: 5.99, quantity: 1, image: "/products/4.jpg" },
-            ],
-            total: 31.97,
-        },
-        {
-            id: 2,
-            orderNumber: "ORD-78213",
-            date: "۱۴۰۲/۱۰/۱۰",
-            status: "تحویل شده",
-            items: [
-                { id: 3, title: "شیرینی دانمارکی", price: 39.99, quantity: 1, image: "/products/3.jpg" },
-                { id: 5, title: "کلوچه", price: 8.5, quantity: 3, image: "/products/5.jpg" },
-            ],
-            total: 65.49,
-        },
-        {
-            id: 3,
-            orderNumber: "ORD-78123",
-            date: "۱۴۰۲/۱۰/۰۵",
-            status: "در حال ارسال",
-            items: [{ id: 2, title: "کیک یزدی", price: 7.49, quantity: 4, image: "/products/2.jpg" }],
-            total: 29.96,
-        },
-    ];
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                setLoading(true);
+                const data = await myOrders();
+                setOrders(data.orders || []);
+            } catch (err) {
+                setError("خطا در دریافت سفارشات");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOrders();
+    }, []);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -48,38 +34,48 @@ export default function Orders() {
         }
     };
 
+    if (loading) {
+        return <p className="text-center text-gray-600 mt-10">در حال بارگذاری...</p>;
+    }
+
+    if (error) {
+        return <p className="text-center text-red-600 mt-10">{error}</p>;
+    }
+
     return (
-        <>
-            <div className="p-4 max-w-5xl mx-auto">
-                <h1 className="text-2xl font-bold mb-6 text-gray-800">سفارشات من</h1>
+        <div className="p-4 max-w-5xl mx-auto">
+            <h1 className="text-2xl font-bold mb-6 text-gray-800">سفارشات من</h1>
 
-                {orders.length === 0 ? (
-                    <p className="text-gray-600 text-center mt-10">هیچ سفارشی ندارید</p>
-                ) : (
-                    <div className="space-y-6">
-                        {orders.map((order) => (
-                            <div
-                                key={order.id}
-                                className="rounded-2xl shadow-md border border-gray-100 bg-white p-5 transition hover:shadow-lg"
-                            >
-                                {/* Header */}
-                                <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
-                                    <div>
-                                        <p className="font-semibold text-gray-800">
-                                            شماره سفارش: {order.orderNumber}
-                                        </p>
-                                        <p className="text-sm text-gray-500 mt-1">تاریخ: {order.date}</p>
-                                    </div>
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                                            order.status
-                                        )}`}
-                                    >
-                    {order.status}
-                  </span>
+            {orders.length === 0 ? (
+                <p className="text-gray-600 text-center mt-10">هیچ سفارشی ندارید</p>
+            ) : (
+                <div className="space-y-6">
+                    {orders.map((order) => (
+                        <div
+                            key={order.id}
+                            className="rounded-2xl shadow-md border border-gray-100 bg-white p-5 transition hover:shadow-lg"
+                        >
+                            {/* Header */}
+                            <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
+                                <div>
+                                    <p className="font-semibold text-gray-800">
+                                        شماره سفارش: {order.orderNumber}
+                                    </p>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        تاریخ ثبت: {order.cDate}
+                                    </p>
                                 </div>
+                                <span
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                                        order.status
+                                    )}`}
+                                >
+                                    {order.status}
+                                </span>
+                            </div>
 
-                                {/* Items */}
+                            {/* Items */}
+                            {order.items && order.items.length > 0 && (
                                 <div className="space-y-3">
                                     {order.items.map((item) => (
                                         <div
@@ -88,7 +84,7 @@ export default function Orders() {
                                         >
                                             <div className="flex items-center gap-3">
                                                 <img
-                                                    src={item.image}
+                                                    src={`https://www.natli.ir/upload/prod/md/${item.prod_pics}.jpg`}
                                                     alt={item.title}
                                                     className="w-20 h-20 object-cover rounded-xl"
                                                 />
@@ -105,29 +101,31 @@ export default function Orders() {
                                         </div>
                                     ))}
                                 </div>
+                            )}
 
-                                {/* Footer */}
-                                <div className="flex justify-between items-center mt-5 border-t border-gray-100 pt-4">
-                                    <span className="font-semibold text-gray-700">مجموع سفارش</span>
-                                    <span className="font-bold text-emerald-600 text-lg">
-                    ${order.total.toFixed(2)}
-                  </span>
-                                </div>
-
-                                {/* Buttons */}
-                                {/*<div className="flex gap-3 mt-5 justify-end">*/}
-                                {/*    <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">*/}
-                                {/*        مشاهده فاکتور*/}
-                                {/*    </button>*/}
-                                {/*    <button className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition">*/}
-                                {/*        سفارش مجدد*/}
-                                {/*    </button>*/}
-                                {/*</div>*/}
+                            {/* Footer */}
+                            <div className="flex justify-between items-center mt-5 border-t border-gray-100 pt-4">
+                                <span className="font-semibold text-gray-700">مجموع سفارش</span>
+                                <span className="font-bold text-emerald-600 text-lg">
+                                    {/*${order.total?.toFixed(2)}*/}
+                                </span>
                             </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </>
+
+                            {/* Buttons */}
+                            {order.canPay >= 1 && (
+                                <div className="flex gap-3 mt-5 justify-end">
+                                    <button
+                                        onClick={() => payOrder(order.id)}
+                                        className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
+                                    >
+                                        پرداخت مجدد
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }

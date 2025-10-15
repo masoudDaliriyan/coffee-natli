@@ -21,6 +21,7 @@ import OTP from "./pages/OTP/OTP.jsx";
 import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
 import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
 import SearchableProductList from "./pages/Search/Search.jsx";
+import Rest from "./pages/Rest/Rest.jsx";
 
 function AppWrapper() {
     return (
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/login" element={<ModalRoute><Login /></ModalRoute>} />
                 <Route path="/basket" element={<ModalRoute><Basket /></ModalRoute>} />
                 <Route path="/search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
+                <Route path="/reset" element={<ModalRoute><Rest /></ModalRoute>} />
             </Routes>
             {state && (
                 <Routes>
