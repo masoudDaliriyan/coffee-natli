@@ -1,13 +1,10 @@
 import React from "react";
-import { useSidebar } from "../../../../context/SidebarContext.jsx";
 import { Link } from "react-router-dom";
 import Button from "../../../../components/Button/Button.jsx";
 import { useAuth } from "../../../../context/AuthContext.jsx";
 
 export default function Header() {
-    const { toggleSidebar } = useSidebar();
     const { isAuthenticated, logout } = useAuth();
-    console.log('auth',isAuthenticated)
 
     return (
         <>

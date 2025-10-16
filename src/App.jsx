@@ -45,7 +45,7 @@ function App() {
                 onClose={() => setIsSidebarOpen(false)}
             />
             <Products />
-            <Routes >
+            <Routes>
                 <Route path="/products/:id" element={<ProductDetails />} />
                 <Route path="/orders" element={<ModalRoute><Orders /></ModalRoute>} />
                 <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />

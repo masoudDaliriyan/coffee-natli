@@ -91,12 +91,14 @@ export default function Orders() {
                                                 <div>
                                                     <p className="font-medium text-gray-800">{item.title}</p>
                                                     <p className="text-sm text-gray-500">
-                                                        تعداد: {item.quantity}
+                                                        تعداد: {item.amount}
                                                     </p>
                                                 </div>
                                             </div>
                                             <p className="font-semibold text-gray-800">
-                                                ${(item.price * item.quantity).toFixed(2)}
+                                                {item.sum}
+                                                &nbsp;
+                                                تومان
                                             </p>
                                         </div>
                                     ))}
@@ -108,6 +110,9 @@ export default function Orders() {
                                 <span className="font-semibold text-gray-700">مجموع سفارش</span>
                                 <span className="font-bold text-emerald-600 text-lg">
                                     {/*${order.total?.toFixed(2)}*/}
+                                    {order.total}
+                                    &nbsp;
+                                    تومان
                                 </span>
                             </div>
 

@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
             if (res.success) {
                 setMessage("درخواست بازیابی رمز عبور با موفقیت ارسال شد.");
-                navigate("/login"); // ✅ redirect immediately
+                navigate("/login");
             } else {
                 setError(res.message || "ارسال درخواست ناموفق بود.");
             }
@@ -65,7 +65,6 @@ const ResetPassword = () => {
                         className="text-right w-full"
                     />
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium mb-1">کد کپچا</label>
                     <TextInput
@@ -75,7 +74,6 @@ const ResetPassword = () => {
                         className="text-right w-full"
                     />
                 </div>
-
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "در حال ارسال..." : "ارسال درخواست"}
                 </Button>

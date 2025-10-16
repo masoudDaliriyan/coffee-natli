@@ -31,7 +31,8 @@ export default function SearchProducts() {
 
 
     if (loading) return <div>Loading...</div>;
-    if (!products) return <div>No products found.</div>;
+
+    if (!products) return <div>موردی یافت نشد</div>;
 
 
     return (

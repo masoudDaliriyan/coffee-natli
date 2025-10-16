@@ -52,10 +52,6 @@ export default function Basket() {
                 ...payload,
                 payType: 1, // 1 = online, 2 = kiosk
             });
-            console.log("✅ orderAdd:", addRes);
-
-            // If backend returns a payment URL or success message:
-            console.log(addRes)
 
             if (addRes?.redirect) {
                 window.location.href = addRes.redirect
@@ -63,7 +59,6 @@ export default function Basket() {
                 clearBasket();
             }
         } catch (err) {
-            console.error("❌ Checkout error:", err);
             setError(err.message || "خطا در ثبت سفارش");
         } finally {
             setLoading(false);
