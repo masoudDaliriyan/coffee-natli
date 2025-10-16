@@ -12,6 +12,7 @@ import ProductListSkeleton from "./components/ProductLoadingSkeleton.jsx";
 
 export default function ProductsList() {
     const { products, loading } = useProducts();
+
     const { activeItem } = useSidebar();
     const productListRef = useRef(null);
 
@@ -40,7 +41,7 @@ export default function ProductsList() {
             <div>
                 <Header />
                 <MainContainer>
-                    <div className="text-center mt-8">No products found.</div>
+                    <div className="text-center mt-8">محصولی یافت نشد</div>
                 </MainContainer>
                 <Footer />
             </div>

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 import Input from "../../components/Input/Input.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-export default function OTP({ onVerified }) {
-    const { mobile: routeMobile } = useParams(); // get mobile from route /otp/:mobile
-    const mobile = routeMobile || ""; // fallback if route param missing
+export default function OTP() {
+    const { mobile: routeMobile } = useParams();
+    const mobile = routeMobile || "";
+    const navigate = useNavigate();
 
-    const { verifyOtp, login, setToken } = useAuth();
+    const { verifyOtp, setToken } = useAuth();
+
     const [otp, setOtp] = useState(Array(5).fill(""));
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -42,22 +44,26 @@ export default function OTP({ onVerified }) {
 
         try {
             const verifyRes = await verifyOtp({ mobile, verify: code });
+            console.log(verifyRes)
+            // ✅ API response format assumed:
+            // { status: 1, message: "...", data: { token: "...", fname, lname, ... } }
 
             if (verifyRes.status !== 1) {
                 setError(verifyRes.message || "کد صحیح نیست.");
-                setIsLoading(false);
                 return;
             }
 
-            const loginRes = await login({ mobile, password: verifyRes.password });
-            if (loginRes.status === 1 && loginRes.data?.jwt) {
-                setToken(loginRes.data.jwt);
-                onVerified?.();
-            } else {
-                setError(loginRes.message || "خطا در ورود خودکار.");
+            // ✅ Store token in context + localStorage
+            const token = verifyRes.data?.token;
+            if (token) {
+                setToken(token);
+                localStorage.setItem("jwt", token);
             }
+
+            // ✅ Redirect to /products
+            navigate("/products");
         } catch (err) {
-            console.log(err)
+            console.error(err);
             setError("خطا در برقراری ارتباط با سرور.");
         } finally {
             setIsLoading(false);
@@ -69,15 +75,14 @@ export default function OTP({ onVerified }) {
             <h2 className="text-xl font-bold mb-2 text-center">کد تأیید</h2>
             <p className="text-center text-gray-600 mb-4">
                 کد ارسال شده به شماره{" "}
-                <span className="font-semibold">
-                    {(mobile || "").replace(/(\d{3})\d{4}(\d{4})/, "$1****$2")}
-                </span>{" "}
-                را وارد کنید
+                <span className="font-semibold">{mobile}</span> را وارد کنید
             </p>
 
-            {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
+            {error && (
+                <p className="text-red-500 text-sm text-center mb-2">{error}</p>
+            )}
 
-            <div className="flex justify-center gap-2 mb-6">
+            <div className="flex flex-row-reverse justify-center gap-2 mb-6">
                 {otp.map((digit, index) => (
                     <Input
                         key={index}

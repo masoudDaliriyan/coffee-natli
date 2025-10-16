@@ -53,8 +53,8 @@ export default function Basket() {
                 payType: 1, // 1 = online, 2 = kiosk
             });
 
-            if (addRes?.redirect) {
-                window.location.href = addRes.redirect
+            if (addRes.data?.redirect) {
+                window.location.href = addRes.data.redirect
             } else {
                 clearBasket();
             }

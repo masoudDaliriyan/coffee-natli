@@ -20,14 +20,7 @@ api.interceptors.request.use((config) => {
 });
 
 const handleResponse = (res) => {
-    const data = res.data;
-    if (data.status === -1) {
-        localStorage.removeItem("jwt");
-        window.location.href = "/login";
-        throw new Error("Session expired");
-    }
-    // if (data.status === 0) throw new Error(data.message || "Request failed");
-    return data.data;
+    return res.data
 };
 
 export const register = async (payload) => {

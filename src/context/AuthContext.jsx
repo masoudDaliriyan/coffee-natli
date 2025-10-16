@@ -21,23 +21,24 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const res = await apiLogin({ mobile, password, captcha });
+            console.log(res)
 
-            if (res.token) {
-                setToken(res.token);
+            if (res.data.token) {
+                setToken(res.data.token);
                 setUser({
-                    mobile: res.mobile,
-                    fname: res.fname,
-                    lname: res.lname,
+                    mobile: res.data.mobile,
+                    fname: res.data.fname,
+                    lname: res.data.lname,
                 });
 
-                localStorage.setItem("jwt", res.token);
+                localStorage.setItem("jwt", res.data.token);
                 setLoading(false);
                 return { success: true, data: res.data };
             }
 
             setLoading(false);
 
-            return { success: false, message: res.message || "خطا در ورود" };
+            return { success: false, message: data.message || "خطا در ورود" };
         } catch (err) {
             setLoading(false);
             return { success: false, message: err.message };

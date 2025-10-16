@@ -18,7 +18,7 @@ export default function ProductList({ products, activeItem }) {
 
     useEffect(() => {
         if (activeItem) scrollToCategory(activeItem);
-    }, [activeItem]);
+    }, [activeItem,products]);
 
     return (
         <>

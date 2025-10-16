@@ -10,8 +10,8 @@ export default function Orders() {
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const data = await myOrders();
-                setOrders(data.orders || []);
+                const res = await myOrders();
+                setOrders(res.data.orders || []);
             } catch (err) {
                 setError("خطا در دریافت سفارشات");
             } finally {

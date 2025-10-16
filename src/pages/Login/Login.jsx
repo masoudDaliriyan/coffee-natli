@@ -23,6 +23,7 @@ const Login = () => {
         }
 
         const res = await login({mobile, password, captcha});
+        console.log(res)
 
         if (res.success) {
             navigate("/");
@@ -60,16 +61,6 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="********"
-                        className="text-right w-full"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium mb-1">کپچا (در صورت نیاز)</label>
-                    <TextInput
-                        value={captcha}
-                        onChange={(e) => setCaptcha(e.target.value)}
-                        placeholder="کد کپچا"
                         className="text-right w-full"
                     />
                 </div>

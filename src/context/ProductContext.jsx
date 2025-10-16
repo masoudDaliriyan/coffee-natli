@@ -12,7 +12,7 @@ export const ProductProvider = ({ children }) => {
     useEffect(() => {
         getProducts()
             .then((data) => {
-                setProducts(data);
+                setProducts(data.data);
                 setLoading(false);
             })
             .catch((err) => {
