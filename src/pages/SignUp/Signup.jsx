@@ -3,6 +3,8 @@ import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the context
 import { useNavigate } from "react-router-dom";
+import SelectInput from "../../components/SelectInput/SelectInput.jsx";
+import PersianDateInput from "../../components/PersianDataInput/PersianDateInput.jsx";
 
 const Signup = () => {
     const { register, loading } = useAuth();
@@ -13,10 +15,9 @@ const Signup = () => {
         password: "",
         firstName: "",
         lastName: "",
-        gender: 0,
+        gender: "",
         birthDate: "",
         nCode: "",
-        captcha: "",
     });
 
     const [error, setError] = useState("");
@@ -33,11 +34,12 @@ const Signup = () => {
         setSuccess("");
 
         const res = await register(form);
-        if (res.success) {
+        console.log(res)
+        if (res.data.status) {
             setSuccess("ثبت نام با موفقیت انجام شد. لطفاً برای ورود تأیید کنید.");
             setTimeout(() => navigate(`/otp/${form.mobile}`), 1500);
         } else {
-            setError(res.message || "ثبت نام ناموفق بود.");
+            setError(res.data.message || "ثبت نام ناموفق بود.");
         }
     };
 
@@ -80,18 +82,18 @@ const Signup = () => {
                 onChange={handleChange}
             />
 
-            <TextInput
+            <SelectInput
                 name="gender"
-                type="number"
-                placeholder="جنسیت (0=مرد،1=زن)"
                 value={form.gender}
                 onChange={handleChange}
-            />
+            >
+                <option value="">انتخاب جنسیت</option>
+                <option value="0">مرد</option>
+                <option value="1">زن</option>
+            </SelectInput>
 
-            <TextInput
+            <PersianDateInput
                 name="birthDate"
-                type="text"
-                placeholder="تاریخ تولد (مثلاً 13720101)"
                 value={form.birthDate}
                 onChange={handleChange}
             />
@@ -101,14 +103,6 @@ const Signup = () => {
                 type="text"
                 placeholder="کد ملی"
                 value={form.nCode}
-                onChange={handleChange}
-            />
-
-            <TextInput
-                name="captcha"
-                type="text"
-                placeholder="کد کپچا (در صورت نیاز)"
-                value={form.captcha}
                 onChange={handleChange}
             />
 

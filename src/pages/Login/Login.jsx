@@ -3,6 +3,7 @@ import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the auth context
 import {Link, useNavigate} from "react-router-dom";
+import LinkText from "../../components/LinkText/LinkText.jsx";
 
 const Login = () => {
     const { login, loading } = useAuth();
@@ -64,14 +65,13 @@ const Login = () => {
                         className="text-right w-full"
                     />
                 </div>
-                <Link to="/reset">
-                    <Button type="submit" className="w-full" disabled={loading}>
-                        فراموشی رمز عبور
-                    </Button>
-                </Link>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button  className="w-full mt-4" disabled={loading}>
                     {loading ? "در حال ورود..." : "ورود"}
                 </Button>
+
+                <LinkText to="/reset"  className="w-full" disabled={loading}>
+                    فراموشی رمز عبور
+                </LinkText>
             </form>
         </div>
     );
