@@ -35,7 +35,6 @@ function App() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
-    // If we navigated with a background state, save it
     const state = location.state && location.state.background;
 
     return (

@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { login as apiLogin, logout as apiLogout, register as apiRegister, verify as apiVerifyOtp } from "../services/api";
+import {useBasket} from "./BasketContex.jsx";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem("jwt"));
     const [loading, setLoading] = useState(false);
+    const {clearBasket} = useBasket()
 
     useEffect(() => {
         if (token) {
@@ -50,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         apiLogout();
         setUser(null);
         setToken(null);
+        clearBasket()
     }, []);
 
     const register = useCallback(async (payload) => {

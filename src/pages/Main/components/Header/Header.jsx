@@ -5,7 +5,6 @@ import { useAuth } from "../../../../context/AuthContext.jsx";
 
 export default function Header() {
     const { isAuthenticated, logout } = useAuth();
-
     return (
         <>
             <div className="relative">

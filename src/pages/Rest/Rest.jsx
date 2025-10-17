@@ -65,17 +65,8 @@ const ResetPassword = () => {
                         className="text-right w-full"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">کد کپچا</label>
-                    <TextInput
-                        value={captcha}
-                        onChange={(e) => setCaptcha(e.target.value)}
-                        placeholder="کد کپچا"
-                        className="text-right w-full"
-                    />
-                </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "در حال ارسال..." : "ارسال درخواست"}
+                    {loading ? "در حال ارسال..." : "بازیابی رمزعبور"}
                 </Button>
             </form>
         </div>
