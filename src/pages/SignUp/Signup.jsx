@@ -23,6 +23,13 @@ const Signup = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+
+    const [from] = useState(() => {
+        const searchParams = new URLSearchParams(location.search);
+        return searchParams.get("from") || "/";
+    });
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
@@ -37,7 +44,7 @@ const Signup = () => {
         console.log(res)
         if (res.data.status) {
             setSuccess("ثبت نام با موفقیت انجام شد. لطفاً برای ورود تأیید کنید.");
-            setTimeout(() => navigate(`/otp/${form.mobile}`), 1500);
+            setTimeout(() => navigate(`/otp/${form.mobile}?from=${from}`), 1500);
         } else {
             setError(res.data.message || "ثبت نام ناموفق بود.");
         }

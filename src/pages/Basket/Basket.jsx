@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { useBasket } from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
-import { orderCheck, orderAdd } from "../../services/api.js"; // ✅ import your API methods
-
+import { orderCheck, orderAdd } from "../../services/api.js";
+import TextInput from "../../components/Input/Input.jsx";
 export default function Basket() {
     const {
         items: basketItems,
         updateQuantity,
         removeItem,
         basketTotal,
-        clearBasket,
     } = useBasket();
 
     const [loading, setLoading] = useState(false);
@@ -72,9 +71,9 @@ export default function Basket() {
         <>
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
-
-
-
+                <label className="block text-sm font-medium mb-2">شماره میز</label>
+                <TextInput className="text-right w-[50%]"/>
+                <div className="mt-4"></div>
                 {basketItems.length === 0 ? (
                     <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
                 ) : (

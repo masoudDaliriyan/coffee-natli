@@ -15,6 +15,11 @@ export default function OTP() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const [from] = useState(() => {
+        const searchParams = new URLSearchParams(location.search);
+        return searchParams.get("from") || "/";
+    });
+
     const handleOtpChange = (value, index) => {
         if (/^[0-9]?$/.test(value)) {
             const newOtp = [...otp];
@@ -51,15 +56,13 @@ export default function OTP() {
                 return;
             }
 
-            // ✅ Store token in context + localStorage
             const token = verifyRes.data?.token;
             if (token) {
                 setToken(token);
                 localStorage.setItem("jwt", token);
             }
 
-            // ✅ Redirect to /products
-            navigate("/products");
+            navigate(from);
         } catch (err) {
             console.error(err);
             setError("خطا در برقراری ارتباط با سرور.");

@@ -5,7 +5,6 @@ const BasketContext = createContext();
 const LOCAL_STORAGE_KEY = "basket_items";
 
 export function BasketProvider({ children }) {
-    // Initialize from localStorage
     const [items, setItems] = useState(() => {
         try {
             const stored = localStorage.getItem(LOCAL_STORAGE_KEY);

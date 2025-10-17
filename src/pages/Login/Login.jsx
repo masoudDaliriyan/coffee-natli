@@ -14,6 +14,12 @@ const Login = () => {
     const [captcha, setCaptcha] = useState("");
     const [error, setError] = useState("");
 
+    const [from] = useState(() => {
+        const searchParams = new URLSearchParams(location.search);
+        return searchParams.get("from") || "/";
+    });
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -24,10 +30,9 @@ const Login = () => {
         }
 
         const res = await login({mobile, password, captcha});
-        console.log(res)
 
         if (res.success) {
-            navigate("/");
+            navigate(from);
             document.body.style.overflow = "auto";
         } else {
             setError(res.message || "ورود ناموفق بود.");
@@ -54,7 +59,6 @@ const Login = () => {
                         className="text-right w-full"
                     />
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium mb-1">رمز عبور</label>
                     <TextInput
@@ -69,8 +73,12 @@ const Login = () => {
                     {loading ? "در حال ورود..." : "ورود"}
                 </Button>
 
+                <LinkText to="/signup?from=/basket"  className="w-full" disabled={loading}>
+                    هنوز ثبت نام نکرده اید؟
+                </LinkText>
+                <div></div>
                 <LinkText to="/reset"  className="w-full" disabled={loading}>
-                    فراموشی رمز عبور
+                    رمز عبور خود را فراموش کرده اید ؟
                 </LinkText>
             </form>
         </div>
