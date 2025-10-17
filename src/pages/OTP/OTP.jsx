@@ -45,11 +45,9 @@ export default function OTP() {
         try {
             const verifyRes = await verifyOtp({ mobile, verify: code });
             console.log(verifyRes)
-            // ✅ API response format assumed:
-            // { status: 1, message: "...", data: { token: "...", fname, lname, ... } }
 
-            if (verifyRes.status !== 1) {
-                setError(verifyRes.message || "کد صحیح نیست.");
+            if (verifyRes.status !== status) {
+                setError(verifyRes.message);
                 return;
             }
 

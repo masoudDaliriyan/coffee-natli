@@ -1,23 +1,34 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const BasketContext = createContext();
 
-export function BasketProvider({ children }) {
-    const [items, setItems] = useState([]);
+const LOCAL_STORAGE_KEY = "basket_items";
 
-    // Get all items
+export function BasketProvider({ children }) {
+    // Initialize from localStorage
+    const [items, setItems] = useState(() => {
+        try {
+            const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
+    }, [items]);
+
     const getItems = () => items;
 
-    // Get single item by id
-    const getItem = (itemId) => items.find(item => item.id === itemId);
+    const getItem = (itemId) => items.find((item) => item.id === itemId);
 
-    // Add or update item
     const addItem = (newItem) => {
-        setItems(currentItems => {
-            const existingItem = currentItems.find(item => item.id === newItem.id);
-            if (!existingItem) return [...currentItems, { ...newItem, quantity: newItem.quantity || 1 }];
-
-            return currentItems.map(item =>
+        setItems((currentItems) => {
+            const existingItem = currentItems.find((item) => item.id === newItem.id);
+            if (!existingItem)
+                return [...currentItems, { ...newItem, quantity: newItem.quantity || 1 }];
+            return currentItems.map((item) =>
                 item.id === newItem.id
                     ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
                     : item
@@ -25,28 +36,24 @@ export function BasketProvider({ children }) {
         });
     };
 
-    // Remove item
     const removeItem = (itemId) => {
-        setItems(currentItems => currentItems.filter(item => item.id !== itemId));
+        setItems((currentItems) => currentItems.filter((item) => item.id !== itemId));
     };
 
-    // Clear basket
     const clearBasket = () => setItems([]);
 
-    // Update quantity
     const updateQuantity = (itemId, newQuantity) => {
-        setItems(currentItems =>
-            currentItems.map(item =>
+        setItems((currentItems) =>
+            currentItems.map((item) =>
                 item.id === itemId ? { ...item, quantity: newQuantity } : item
             )
         );
     };
 
-    // Check if item exists
-    const isItemExist = (id) => items.some(item => item.id === id);
+    const isItemExist = (id) => items.some((item) => item.id === id);
 
     // Computed values
-    const basketTotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const basketTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
     const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
     const contextValue = {
@@ -59,14 +66,10 @@ export function BasketProvider({ children }) {
         updateQuantity,
         basketTotal,
         itemCount,
-        isItemExist
+        isItemExist,
     };
 
-    return (
-        <BasketContext.Provider value={contextValue}>
-            {children}
-        </BasketContext.Provider>
-    );
+    return <BasketContext.Provider value={contextValue}>{children}</BasketContext.Provider>;
 }
 
 export const useBasket = () => {

@@ -45,18 +45,21 @@ export default function Basket() {
 
             // Step 1: Check order
             const checkRes = await orderCheck(payload);
-            console.log("✅ orderCheck:", checkRes);
 
             // Step 2: Add order (submit)
             const addRes = await orderAdd({
                 ...payload,
-                payType: 1, // 1 = online, 2 = kiosk
+                payType: 1,
             });
 
+
+            if(addRes.message && addRes.status===0){
+                setError(addRes.message)
+            }
             if (addRes.data?.redirect) {
                 window.location.href = addRes.data.redirect
             } else {
-                clearBasket();
+                // clearBasket();
             }
         } catch (err) {
             setError(err.message || "خطا در ثبت سفارش");
@@ -70,9 +73,7 @@ export default function Basket() {
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
 
-                {error && (
-                    <div className="text-red-600 text-sm mb-2">{error}</div>
-                )}
+
 
                 {basketItems.length === 0 ? (
                     <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
@@ -120,6 +121,9 @@ export default function Basket() {
                             ))}
                         </div>
 
+                        {error && (
+                            <div className="text-red-600 text-sm mb-2">{error}</div>
+                        )}
                         <Button
                             onClick={handleCheckout}
                             disabled={loading}
