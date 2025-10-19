@@ -4,6 +4,7 @@ import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the auth context
 import {Link, useNavigate} from "react-router-dom";
 import LinkText from "../../components/LinkText/LinkText.jsx";
+import {RootLink} from "../../components/RootLink/RootLink.jsx";
 
 const Login = () => {
     const { login, loading } = useAuth();
@@ -73,13 +74,17 @@ const Login = () => {
                     {loading ? "در حال ورود..." : "ورود"}
                 </Button>
 
-                <LinkText to="signup?from=/basket"  className="w-full" disabled={loading}>
-                    هنوز ثبت نام نکرده اید؟
-                </LinkText>
+                <RootLink to="/signup?from=/basket" >
+                    <LinkText className="w-full" disabled={loading} asChild={true}>
+                        هنوز ثبت نام نکرده اید؟
+                    </LinkText>
+                </RootLink>
                 <div></div>
-                <LinkText to="reset"  className="w-full" disabled={loading}>
-                    رمز عبور خود را فراموش کرده اید ؟
-                </LinkText>
+                <RootLink to="/reset">
+                    <LinkText asChild={true}  className="w-full" disabled={loading}>
+                        رمز عبور خود را فراموش کرده اید ؟
+                    </LinkText>
+                </RootLink>
             </form>
         </div>
     );

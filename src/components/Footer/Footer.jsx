@@ -5,6 +5,7 @@ import Button from "../Button/Button.jsx";
 import {useSidebar} from "../../context/SidebarContext.jsx";
 import {useBasket} from "../../context/BasketContex.jsx";
 import {useAuth} from "../../context/AuthContext.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 export default function Footer() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -12,6 +13,7 @@ export default function Footer() {
     const {toggleSidebar} = useSidebar();
     const navigate = useNavigate();
     const {items} = useBasket()
+    const rootNavigate = useRootNavigate()
 
     const handleSearch = () => {
         console.log("Searching for:", searchTerm);
@@ -21,7 +23,7 @@ export default function Footer() {
         if(isAuthenticated){
             navigate("basket")
         }else{
-            navigate("login?from=/basket")
+            rootNavigate("login?from=/basket")
         }
     }
 

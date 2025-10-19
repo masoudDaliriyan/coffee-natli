@@ -5,6 +5,7 @@ import {useAuth} from "../../../../context/AuthContext.jsx";
 import LogoIcon from '/public/icons/logo.jpg'
 import LoginIcon from '/public/icons/Login.svg'
 import HeaderImg from '/public/icons/cover.jpg'
+import {RootLink} from "../../../../components/RootLink/RootLink.jsx";
 
 export default function Header() {
     const {isAuthenticated, logout} = useAuth();
@@ -20,21 +21,21 @@ export default function Header() {
                             <Button onClick={logout}>
                                 خروج
                             </Button>
-                            <Link to="orders">
+                            <RootLink to="/orders">
                                 <Button variant="secondary">سفارشات</Button>
-                            </Link>
+                            </RootLink>
                         </div>
                     ) : (
                         <div className="absolute top-[20px] left-[20px] flex gap-2">
-                            <Link to="login">
+                            <RootLink to="/login">
                                 <Button>
                                     <img src={LoginIcon} alt="Login"/>
                                     ورود
                                 </Button>
-                            </Link>
-                            <Link to="signup">
+                            </RootLink>
+                            <RootLink to="/signup">
                                 <Button>ثبت نام</Button>
-                            </Link>
+                            </RootLink>
                         </div>
                     )}
                     <img className="h-[50px] mt-[180px]" src={LogoIcon} alt="Logo"/>
