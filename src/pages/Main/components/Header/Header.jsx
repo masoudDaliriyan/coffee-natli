@@ -32,7 +32,7 @@ export default function Header() {
                                     ورود
                                 </Button>
                             </Link>
-                            <Link to="/signup">
+                            <Link to="signup">
                                 <Button>ثبت نام</Button>
                             </Link>
                         </div>
