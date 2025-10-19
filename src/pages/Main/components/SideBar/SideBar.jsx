@@ -1,6 +1,7 @@
 import React from "react";
 import { useSidebar } from "../../../../context/SidebarContext.jsx";
 import { useProducts } from "../../../../context/ProductContext.jsx";
+import CloseIcon from '/public/icons/close.svg'
 
 export default function Sidebar() {
     const { isOpen, toggleSidebar, activeItem, setActiveItem } = useSidebar();
@@ -42,7 +43,7 @@ export default function Sidebar() {
                         className="p-1 hover:bg-gray-100 rounded transition-colors"
                         aria-label="بستن منو"
                     >
-                        <img src="/icons/close.svg" alt="بستن" className="w-6 h-6" />
+                        <img src={CloseIcon} alt="بستن" className="w-6 h-6" />
                     </button>
                 </div>
 

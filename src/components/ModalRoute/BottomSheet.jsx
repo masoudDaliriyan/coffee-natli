@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import  closeIcon from '../../../public/icons/close.svg'
 
 const BottomSheet = ({ initialOpen, onClose, children }) => {
     const [visible, setVisible] = useState(false);
@@ -43,7 +44,7 @@ const BottomSheet = ({ initialOpen, onClose, children }) => {
                         className="hover:bg-gray-100 rounded transition-colors p-4"
                         aria-label="بستن منو"
                     >
-                        <img src="/icons/close.svg" alt="بستن" className="w-6 h-6" />
+                        <img src={closeIcon} />
                     </button>
                     {children}
                 </div>

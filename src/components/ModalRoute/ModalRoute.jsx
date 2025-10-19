@@ -6,11 +6,11 @@ export default function ModalRoute({ children }) {
     const location = useLocation();
 
     const handleClose = () => {
-        if (location.state && location.state.background) {
+        // if (location.state && location.state.background) {
             navigate(-1);
-        } else {
-            navigate("/", { replace: true });
-        }
+        // } else {
+        //     navigate("/", { replace: true });
+        // }
 
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
