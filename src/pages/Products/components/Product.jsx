@@ -29,6 +29,7 @@ export default function Product({ data }) {
                 <div>
                     <h2 className="mt-2 font-semibold text-lg">{data.title}</h2>
                     <p className="text-gray-700">ریال {data.price}</p>
+                    <div>{data.discount}%</div>
                 </div>
 
                 <div className="flex">
