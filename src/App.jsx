@@ -8,7 +8,6 @@ import {
     useNavigate
 } from "react-router-dom";
 
-// pages
 import Products from './pages/Products/Products.jsx';
 import { ProductDetails } from "./pages/Product/ProductDetail.jsx";
 import Basket from "./pages/Basket/Basket.jsx";
@@ -17,7 +16,6 @@ import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/SignUp/Signup.jsx";
 import OTP from "./pages/OTP/OTP.jsx";
 
-// components & context
 import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
 import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
 import SearchableProductList from "./pages/Search/Search.jsx";
@@ -31,10 +29,7 @@ function AppWrapper() {
     return (
         <Router basename="/coffee-shop">
             <Routes>
-                {/* Only accept exactly 2 parameters */}
                 <Route path="/:unique_name/:tableNumber/*" element={<App />} />
-
-                {/* Catch all other routes - they will "break" */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
 
@@ -57,25 +52,20 @@ function App() {
             />
             <Products />
             <Routes>
-
-                {/*<Route  path="/:unique_name/:tableNumber">*/}
-                    <Route path="products/:id" element={<ProductDetails />} />
-                    <Route path="orders" element={<ModalRoute><Orders /></ModalRoute>} />
-                    <Route path="signup" element={<ModalRoute><Signup /></ModalRoute>} />
-                    <Route path="otp/:mobile" element={<ModalRoute><OTP /></ModalRoute>} />
-                    <Route path="login" element={<ModalRoute><Login /></ModalRoute>} />
-                    <Route path="basket" element={<ModalRoute><Basket /></ModalRoute>} />
-                    <Route path="search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
-                    <Route path="reset" element={<ModalRoute><Rest /></ModalRoute>} />
-                {/*</Route>*/}
+                <Route path="products/:id" element={<ProductDetails />} />
+                <Route path="orders" element={<ModalRoute><Orders /></ModalRoute>} />
+                <Route path="signup" element={<ModalRoute><Signup /></ModalRoute>} />
+                <Route path="otp/:mobile" element={<ModalRoute><OTP /></ModalRoute>} />
+                <Route path="login" element={<ModalRoute><Login /></ModalRoute>} />
+                <Route path="basket" element={<ModalRoute><Basket /></ModalRoute>} />
+                <Route path="search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
+                <Route path="reset" element={<ModalRoute><Rest /></ModalRoute>} />
             </Routes>
             {state && (
-                <Routes>
-                    <Route path="/:unique_name/:tableNumber">
-                        <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
-                        <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
-                    </Route>
-                </Routes>
+            <Routes>
+                <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
+                <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
+            </Routes>
             )}
         </>
     );

@@ -20,7 +20,7 @@ export default function Header() {
                             <Button onClick={logout}>
                                 خروج
                             </Button>
-                            <Link to="/orders">
+                            <Link to="orders">
                                 <Button variant="secondary">سفارشات</Button>
                             </Link>
                         </div>

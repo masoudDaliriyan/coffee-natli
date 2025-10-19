@@ -19,9 +19,9 @@ export default function Footer() {
 
     const handelOnclickBasket = () => {
         if(isAuthenticated){
-            navigate("/basket")
+            navigate("basket")
         }else{
-            navigate("/login?from=/basket")
+            navigate("login?from=/basket")
         }
     }
 
@@ -40,14 +40,14 @@ export default function Footer() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="flex-1"
                     readOnly={true}
-                    onClick={() => navigate("/search")}
+                    onClick={() => navigate("search")}
                 />
                 {items.length > 0 && (
                         <Button
                             onClick={handelOnclickBasket}
                             variant="secondary"
                             className="w-[100px] flex items-center justify-center bg-green-700"
-                        >
+                       >
                             سبد خرید
                         </Button>
                 )}

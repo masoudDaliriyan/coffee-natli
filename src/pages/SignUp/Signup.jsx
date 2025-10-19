@@ -43,7 +43,7 @@ const Signup = () => {
         const res = await register(form);
         if (res.data.status) {
             setSuccess("ثبت نام با موفقیت انجام شد. لطفاً برای ورود تأیید کنید.");
-            setTimeout(() => navigate(`/otp/${form.mobile}?from=${from}`), 1500);
+            setTimeout(() => navigate(`../otp/${form.mobile}?from=${from}`), 1500);
         } else {
             setError(res.data.message || "ثبت نام ناموفق بود.");
         }

@@ -28,8 +28,9 @@ export default function Product({ data }) {
             <div className="w-1/2 flex flex-col justify-between pr-4">
                 <div>
                     <h2 className="mt-2 font-semibold text-lg">{data.title}</h2>
-                    <p className="text-gray-700">ریال {data.price}</p>
-                    <div>{data.discount}%</div>
+                    {data.discount || <p className="text-gray-700">ریال {data.price}</p> }
+                    {data.discount && <p className="text-gray-700">ریال {data.price_after_discount}</p>}
+                    {data.discount && <div>{data.discount}% تخفیف</div>}
                 </div>
 
                 <div className="flex">

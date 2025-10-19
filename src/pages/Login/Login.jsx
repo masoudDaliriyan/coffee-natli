@@ -73,11 +73,11 @@ const Login = () => {
                     {loading ? "در حال ورود..." : "ورود"}
                 </Button>
 
-                <LinkText to="/signup?from=/basket"  className="w-full" disabled={loading}>
+                <LinkText to="signup?from=/basket"  className="w-full" disabled={loading}>
                     هنوز ثبت نام نکرده اید؟
                 </LinkText>
                 <div></div>
-                <LinkText to="/reset"  className="w-full" disabled={loading}>
+                <LinkText to="reset"  className="w-full" disabled={loading}>
                     رمز عبور خود را فراموش کرده اید ؟
                 </LinkText>
             </form>
