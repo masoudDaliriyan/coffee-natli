@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { resetPassword } from "../../services/api.js";
-import { useNavigate } from "react-router-dom";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 const ResetPassword = () => {
-    const navigate = useNavigate();
+    const rootNavigate = useRootNavigate();
 
     const [mobile, setMobile] = useState("");
     const [captcha, setCaptcha] = useState("");
@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
             if (res.success) {
                 setMessage("درخواست بازیابی رمز عبور با موفقیت ارسال شد.");
-                navigate("/login");
+                rootNavigate("/login");
             } else {
                 setError(res.message || "ارسال درخواست ناموفق بود.");
             }

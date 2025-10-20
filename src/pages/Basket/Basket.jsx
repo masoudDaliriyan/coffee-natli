@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
+import { useParams } from "react-router-dom";
 import { useBasket } from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
@@ -11,6 +12,19 @@ export default function Basket() {
         removeItem,
         basketTotal,
     } = useBasket();
+
+    const [tableNumber, setTableNumber] = useState("");
+    const params = useParams();
+
+    useEffect(() => {
+        setTableNumber(params.tableNumber)
+    }, []);
+
+    const handleChange = (e) => {
+        setTableNumber(e.target.value);
+    };
+
+
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -33,7 +47,7 @@ export default function Basket() {
 
         try {
             const payload = {
-                tableNo: "18", // ✅ can make dynamic later
+                tableNo: tableNumber||routeTableNumber, // ✅ can make dynamic later
                 coupon: "",    // optional
                 prods: basketItems.map(item => ({
                     id: item.id,
@@ -72,7 +86,12 @@ export default function Basket() {
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
                 <label className="block text-sm font-medium mb-2">شماره میز</label>
-                <TextInput className="text-right w-[50%]"/>
+                <TextInput
+                    type="text"
+                    value={tableNumber}
+                    onChange={handleChange}
+                    className="text-right w-[50%] border p-1 rounded"
+                />
                 <div className="mt-4"></div>
                 {basketItems.length === 0 ? (
                     <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>

@@ -69,7 +69,7 @@ export default function Orders() {
             ) : (
                 <div className="space-y-6">
                     {orders.map((order) => {
-                        const badge = getPayStatusBadge(order.payStatus);
+                        const badge = getPayStatusBadge(order.status_id);
 
                         return (
                             <div
@@ -89,7 +89,7 @@ export default function Orders() {
                                     <span
                                         className={`px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}
                                     >
-                                        {badge.label}
+                                        {order.status_title}
                                     </span>
                                 </div>
 

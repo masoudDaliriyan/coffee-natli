@@ -1,10 +1,23 @@
 import axios from "axios";
 
+function getShopDataFromLocation() {
+    const path = window.location.pathname;
+    const parts = path.split("/");
+
+    // basic structure check
+    if (parts[1] !== "coffee-shop" || parts.length < 4) return null;
+
+    return {
+        branchName: parts[2],
+        tableNumber: parts[3],
+    };
+}
+const {branchName} = getShopDataFromLocation()
 // Base URL of your backend
 const BASE_URL = "https://www.natli.ir/cws";
 
 // Default branch name (you can make this dynamic later)
-const BRANCH = "sohrevardi-1";
+const BRANCH = branchName
 
 // Create an axios instance
 const api = axios.create({

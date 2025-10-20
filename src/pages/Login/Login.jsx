@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the auth context
-import {Link, useNavigate} from "react-router-dom";
 import LinkText from "../../components/LinkText/LinkText.jsx";
 import {RootLink} from "../../components/RootLink/RootLink.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 const Login = () => {
     const { login, loading } = useAuth();
-    const navigate = useNavigate();
+    const rootNavigate = useRootNavigate();
 
     const [mobile, setMobile] = useState(""); // use mobile (API requires this)
     const [password, setPassword] = useState("");
@@ -33,9 +33,10 @@ const Login = () => {
         const res = await login({mobile, password, captcha});
 
         if (res.success) {
-            navigate(from);
+            rootNavigate(from);
             document.body.style.overflow = "auto";
         } else {
+            console.log(res)
             setError(res.message || "ورود ناموفق بود.");
         }
     };

@@ -44,7 +44,7 @@ const BottomSheet = ({ initialOpen, onClose, children }) => {
                         className="hover:bg-gray-100 rounded transition-colors p-4"
                         aria-label="بستن منو"
                     >
-                        <img src={closeIcon} />
+                        <img src={closeIcon} className="w-[30px]" />
                     </button>
                     {children}
                 </div>

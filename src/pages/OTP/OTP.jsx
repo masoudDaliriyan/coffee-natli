@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 import Input from "../../components/Input/Input.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 export default function OTP() {
     const { mobile: routeMobile } = useParams();
     const mobile = routeMobile || "";
-    const navigate = useNavigate();
+    const rooNavigate = useRootNavigate()
 
     const { verifyOtp, setToken } = useAuth();
 
@@ -51,7 +52,7 @@ export default function OTP() {
             const verifyRes = await verifyOtp({ mobile, verify: code });
             console.log(verifyRes)
 
-            if (verifyRes.status !== status) {
+            if (verifyRes.status !== 1) {
                 setError(verifyRes.message);
                 return;
             }
@@ -60,9 +61,12 @@ export default function OTP() {
             if (token) {
                 setToken(token);
                 localStorage.setItem("jwt", token);
+
             }
 
-            navigate(from);
+            rooNavigate(from || '/');
+            document.body.style.overflow = "";
+
         } catch (err) {
             console.error(err);
             setError("خطا در برقراری ارتباط با سرور.");

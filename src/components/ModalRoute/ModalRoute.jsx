@@ -4,13 +4,13 @@ import BottomSheet from "./BottomSheet.jsx";
 export default function ModalRoute({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const params = useParams(); // { unique_name: "coffee-shop", tableNumber: "2" }
+    const params = useParams();
 
     const handleClose = () => {
         // Recreate base route from params
         const basePath = `/${params.unique_name}/${params.tableNumber}/`;
 
-        navigate(basePath, { replace: true });
+        navigate(basePath);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 

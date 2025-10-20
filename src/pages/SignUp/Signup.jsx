@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx"; // import the context
-import { useNavigate } from "react-router-dom";
 import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 import PersianDateInput from "../../components/PersianDataInput/PersianDateInput.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 const Signup = () => {
     const { register, loading } = useAuth();
-    const navigate = useNavigate();
+    const rootNavigate = useRootNavigate();
+
 
     const [form, setForm] = useState({
         mobile: "",        // ← use the real API field
@@ -26,7 +27,7 @@ const Signup = () => {
 
     const [from] = useState(() => {
         const searchParams = new URLSearchParams(location.search);
-        return searchParams.get("from") || "/";
+        return searchParams.get("from") || "";
     });
 
 
@@ -43,7 +44,7 @@ const Signup = () => {
         const res = await register(form);
         if (res.data.status) {
             setSuccess("ثبت نام با موفقیت انجام شد. لطفاً برای ورود تأیید کنید.");
-            setTimeout(() => navigate(`../otp/${form.mobile}?from=${from}`), 1500);
+            setTimeout(() => rootNavigate(`/otp/${form.mobile}?from=${from}`), 1500);
         } else {
             setError(res.data.message || "ثبت نام ناموفق بود.");
         }

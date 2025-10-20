@@ -20,11 +20,10 @@ export const AuthProvider = ({ children }) => {
 
     const login = useCallback(async ({ mobile, password, captcha = "" }) => {
         setLoading(true);
-        try {
             const res = await apiLogin({ mobile, password, captcha });
             console.log(res)
 
-            if (res.data.token) {
+            if (res?.data?.token) {
                 setToken(res.data.token);
                 setUser({
                     mobile: res.data.mobile,
@@ -33,17 +32,11 @@ export const AuthProvider = ({ children }) => {
                 });
 
                 localStorage.setItem("jwt", res.data.token);
-                setLoading(false);
-                return { success: true, data: res.data };
             }
 
             setLoading(false);
 
-            return { success: false, message: data.message || "خطا در ورود" };
-        } catch (err) {
-            setLoading(false);
-            return { success: false, message: err.message };
-        }
+            return { success: res.status!==0, message: res.message || "خطا در ورود" };
     }, []);
 
 

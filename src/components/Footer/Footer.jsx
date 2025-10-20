@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
 import TextInput from "../Input/Input.jsx";
 import Button from "../Button/Button.jsx";
 import {useSidebar} from "../../context/SidebarContext.jsx";
@@ -11,7 +10,6 @@ export default function Footer() {
     const [searchTerm, setSearchTerm] = useState("");
     const {isAuthenticated} =  useAuth()
     const {toggleSidebar} = useSidebar();
-    const navigate = useNavigate();
     const {items} = useBasket()
     const rootNavigate = useRootNavigate()
 
@@ -21,7 +19,7 @@ export default function Footer() {
 
     const handelOnclickBasket = () => {
         if(isAuthenticated){
-            navigate("basket")
+            rootNavigate("/basket")
         }else{
             rootNavigate("login?from=/basket")
         }
@@ -42,7 +40,7 @@ export default function Footer() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="flex-1"
                     readOnly={true}
-                    onClick={() => navigate("search")}
+                    onClick={() => rootNavigate("/search")}
                 />
                 {items.length > 0 && (
                         <Button

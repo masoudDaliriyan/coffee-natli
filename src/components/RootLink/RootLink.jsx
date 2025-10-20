@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 export function RootLink({ to, children, tableNavigation = false, ...props }) {
     const { unique_name, tableNumber } = useParams();
 
-    const finalPath = `/${unique_name}/${tableNumber}${to}`
+    const finalPath = `/${unique_name}/${tableNumber}/${to}`
 
     return (
         <Link to={finalPath} {...props}>

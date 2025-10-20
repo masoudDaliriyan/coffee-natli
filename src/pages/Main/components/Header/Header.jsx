@@ -38,10 +38,9 @@ export default function Header() {
                             </RootLink>
                         </div>
                     )}
-                    <img className="h-[50px] mt-[180px]" src={LogoIcon} alt="Logo"/>
+                    <img className="w-[180px] mt-[180px]" src={LogoIcon} alt="Logo"/>
                 </div>
             </div>
-
             <div className="mt-5 mb-5 text-center text-lg font-semibold">
                 کافه قنادی وانیلا (اقدسیه)
             </div>
