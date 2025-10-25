@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { myOrders, payOrder } from "../../services/api.js"; // <-- your API functions
+import { myOrders, payOrder } from "../../services/api.js";
+import DefaultSkeleton from "../../components/DefaultSkeleton/DefaultSkeleton.jsx"; // <-- your API functions
 
 export default function Orders() {
     const [orders, setOrders] = useState([]);
@@ -53,7 +54,7 @@ export default function Orders() {
     };
 
     if (loading) {
-        return <p className="text-center text-gray-600 mt-10">در حال بارگذاری...</p>;
+        return <div className="px-4"><DefaultSkeleton/></div>;
     }
 
     if (error) {
@@ -133,8 +134,6 @@ export default function Orders() {
                                         {order.total} تومان
                                     </span>
                                 </div>
-
-                                {/* Buttons */}
                                 {order.canPay >= 1 && (
                                     <div className="flex gap-3 mt-5 justify-end">
                                         <button

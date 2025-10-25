@@ -1,5 +1,21 @@
 import axios from "axios";
 
+export function rootNavigate() {
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+
+    // Take the first three segments
+    const part1 = pathParts[0] || "";
+    const part2 = pathParts[1] || "";
+    const part3 = pathParts[2] || "";
+
+    // Build the new path
+    const finalPath = `/${part1}/${part2}/${part3}/`;
+
+    // Navigate
+    window.location.href = finalPath;
+}
+
+
 function getShopDataFromLocation() {
     const path = window.location.pathname;
     const parts = path.split("/");
@@ -33,6 +49,12 @@ api.interceptors.request.use((config) => {
 });
 
 const handleResponse = (res) => {
+
+    if (res.status === -1) {
+        localStorage.clear()
+        rootNavigate()
+    }
+
     return res.data
 };
 

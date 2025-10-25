@@ -22,6 +22,35 @@ export function BasketProvider({ children }) {
 
     const getItem = (itemId) => items.find((item) => item.id === itemId);
 
+    function addExtraToItem(itemId, extraItem) {
+        setItems(currentItems => {
+            return currentItems.map(item => {
+                if (item.id !== itemId) return item;
+
+                const extras = item.extras || [];
+                // Only add if not already present
+                if (!extras.find(e => e.id === extraItem.id)) {
+                    return { ...item, extras: [...extras, extraItem] };
+                }
+                return item;
+            });
+        });
+    }
+
+    function removeExtraFromItem(itemId, extraId) {
+        setItems(currentItems => {
+            return currentItems.map(item => {
+                if (item.id !== itemId) return item;
+
+                const extras = item.extras || [];
+                // Remove the extra if it exists
+                const newExtras = extras.filter(e => e.id !== extraId);
+
+                return { ...item, extras: newExtras };
+            });
+        });
+    }
+
     const addItem = (newItem) => {
         setItems((currentItems) => {
             const existingItem = currentItems.find((item) => item.id === newItem.id);
@@ -49,6 +78,12 @@ export function BasketProvider({ children }) {
         );
     };
 
+    const isExtraSelected = (itemId, extraId) => {
+        const item = items.find(i => i.id === itemId);
+        if (!item || !item.extras) return false;
+        return item.extras.some(e => e.id === extraId);
+    };
+
     const isItemExist = (id) => items.some((item) => item.id === id);
 
     // Computed values
@@ -66,6 +101,9 @@ export function BasketProvider({ children }) {
         basketTotal,
         itemCount,
         isItemExist,
+        isExtraSelected,
+        addExtraToItem,
+        removeExtraFromItem
     };
 
     return <BasketContext.Provider value={contextValue}>{children}</BasketContext.Provider>;
