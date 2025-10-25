@@ -47,7 +47,7 @@ export default function Basket() {
 
         try {
             const payload = {
-                tableNo: tableNumber||routeTableNumber, // ✅ can make dynamic later
+                tableNo: tableNumber||routeTableNumber,
                 coupon: "",    // optional
                 prods: basketItems.map(item => ({
                     id: item.id,
@@ -71,9 +71,8 @@ export default function Basket() {
             }
             if (addRes.data?.redirect) {
                 window.location.href = addRes.data.redirect
-            } else {
-                // clearBasket();
             }
+
         } catch (err) {
             setError(err.message || "خطا در ثبت سفارش");
         } finally {
@@ -124,6 +123,17 @@ export default function Basket() {
                                                     onChange={(id, newQty) => updateQuantity(id, newQty)}
                                                 />
                                             </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div className="mt-2">
+                                        <div className="list-disc list-inside">
+                                            {item.extras.map(extra => (
+                                                <div key={extra.id}>
+                                                    {extra.title} - {extra.price.toLocaleString("fa-IR")} تومان
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
 
