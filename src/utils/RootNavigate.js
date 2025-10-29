@@ -11,10 +11,15 @@ export function useRootNavigate() {
 
     const rootNavigate = (to, options = {}) => {
         const { root = false, replace = false, state } = options;
+        let path  =   `/${unique_name}/${tableNumber}/${to}/`;
 
-        const finalPath = `/${unique_name}/${tableNumber}/${to}/`;
+        if(!tableNumber){
+            path = `/${unique_name}/0/${to}`;
+        }
 
-        navigate(finalPath, { replace, state });
+
+
+        navigate(path, { replace, state });
     };
 
     return rootNavigate;

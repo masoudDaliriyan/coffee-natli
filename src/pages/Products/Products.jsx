@@ -16,6 +16,7 @@ export default function ProductsList() {
     const { activeItem } = useSidebar();
     const productListRef = useRef(null);
 
+
     const scrollToProducts = () => {
         if (productListRef.current) {
             productListRef.current.scrollIntoView({ behavior: "smooth" });

@@ -20,9 +20,6 @@ function getShopDataFromLocation() {
     const path = window.location.pathname;
     const parts = path.split("/");
 
-    // basic structure check
-    if (parts[1] !== "coffee-shop" || parts.length < 4) return null;
-
     return {
         branchName: parts[2],
         tableNumber: parts[3],

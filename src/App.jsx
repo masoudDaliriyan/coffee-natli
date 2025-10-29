@@ -31,29 +31,17 @@ const branches = [
 ];
 
 function AppWrapper() {
+
     return (
         <Router basename="/coffee-shop">
             <Routes>
-                <Route path="/:unique_name/:tableNumber/*" element={<AppWithParamsCheck />} />
+                <Route path="/:unique_name/:tableNumber?/*" element={<App />} />
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
         </Router>
     );
 }
-
-function AppWithParamsCheck() {
-    const { unique_name, tableNumber } = useParams();
-
-    if (!branches.includes(unique_name)) {
-        return <Navigate to="/404" replace />;
-    }
-
-    return <App />;
-}
-
-
-
 
 function App() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -63,19 +51,17 @@ function App() {
 
     return (
         <>
-
             <Sidebar
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
             />
             <Products />
             <Routes>
-                <Route path="products/:id" element={<ProductDetails />} />
-                <Route path="orders" element={<ModalRoute><Orders /></ModalRoute>} />
+                <Route path="rders" element={<ModalRoute><Orders /></ModalRoute>} />
                 <Route path="signup" element={<ModalRoute><Signup /></ModalRoute>} />
                 <Route path="otp/:mobile" element={<ModalRoute><OTP /></ModalRoute>} />
                 <Route path="login" element={<ModalRoute><Login /></ModalRoute>} />
-                <Route path="basket" element={<ModalRoute><Basket /></ModalRoute>} />
+                <Route path="/basket" element={<ModalRoute><Basket /></ModalRoute>} />
                 <Route path="search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
                 <Route path="info" element={<ModalRoute><StoreInfo /></ModalRoute>} />
                 <Route path="reset" element={<ModalRoute><Rest /></ModalRoute>} />

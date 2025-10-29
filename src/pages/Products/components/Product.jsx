@@ -5,17 +5,30 @@ import {useBasket} from "../../../context/BasketContex.jsx";
 import CheckboxInput from "../../../components/InputCheckbox/InputCheckbox.jsx"
 
 export default function Product({data}) {
-    const {getItem, addItem, removeItem, updateQuantity, isItemExist, addExtraToItem,isExtraSelected,removeExtraFromItem} = useBasket();
-    const [selectedExtras, setSelectedExtras] = useState([]);
-
+    const {
+        getItem,
+        addItem,
+        removeItem,
+        updateQuantity,
+        isItemExist,
+        addExtraToItem,
+        isExtraSelected,
+        removeExtraFromItem,
+        updateQuantityItemExtra,
+        getExtraById
+    } = useBasket();
     const basketItem = getItem(data.id);
 
 
-    const getProductExtras = (productId, basket) => {
-        const item = getItem(productId); // assumes basket has getItem
-        console.log(item)
-        return item?.extras || [];
+    const normalizeValue = (value) => {
+        const num = Number(value);
+        return isNaN(num) ? 1 : num;
     };
+
+
+    const onExtraCounterChange = (item, extraId, newQuantity) => {
+        updateQuantityItemExtra(item, extraId, newQuantity)
+    }
 
     const handleAddToBasket = () => {
         addItem({
@@ -23,7 +36,8 @@ export default function Product({data}) {
             title: data.title,
             price: data.price,
             image: data.thumbnail,
-            extras: selectedExtras, // store selected extras in basket
+            extra: [],
+            quantity: 1
         });
     };
 
@@ -31,16 +45,16 @@ export default function Product({data}) {
         removeItem(data.id);
     };
 
-    const handleExtraChange = (productId,extra) => {
-        if(isExtraSelected(productId,extra.id)){
-            removeExtraFromItem(productId,extra.id)
+    const handleExtraChange = (productId, extraItem) => {
+
+        if (isExtraSelected(productId, extraItem.id)) {
+            removeExtraFromItem(productId, extraItem)
             return
         }
 
-        addExtraToItem(productId,extra)
+        addExtraToItem(productId, extraItem)
 
     };
-
 
 
     return (
@@ -93,7 +107,6 @@ export default function Product({data}) {
                     </div>
 
                 </div>
-
                 <div className="w-1/2 h-full">
                     <img
                         src={`https://www.natli.ir/upload/prod/md/${data.thumbnail}.jpg`}
@@ -102,7 +115,6 @@ export default function Product({data}) {
                     />
                 </div>
             </div>
-
             {data?.extra?.length > 0 && isItemExist(data.id) && (
                 <div className="mt-3  pt-2">
                     <h4 className="font-medium mb-1 text-sm text-gray-700">انتخاب موارد اضافه:</h4>
@@ -110,20 +122,31 @@ export default function Product({data}) {
                         {data.extra.map((item) => (
                             <div
                                 key={item.id}
-                                className="flex-1  max-w-[50%] px-2 mb-2 flex items-center justify-between border rounded p-2 hover:bg-gray-50"
+                                className="flex-1 flex flex-col max-w-[50%] px-2 mb-2  items-center  justify-between border rounded p-2 hover:bg-gray-50 flex items-start flex-col gap-1"
                             >
-                                <div className="flex items-center space-x-2">
-                                    <CheckboxInput
-                                        checked={isExtraSelected(data.id,item.id)}
-                                        onChange={() => handleExtraChange(data.id,item)}
-                                    />
-                                    <span className="text-sm">{item.title}</span>
+                                <div>
+                                    <div className="flex items-center space-x-2">
+                                        <CheckboxInput
+                                            checked={isExtraSelected(data.id, item.id)}
+                                            onChange={() => handleExtraChange(data.id, item)}
+                                        />
+                                        <span className="text-sm">{item.title}</span>
+                                    </div>
                                 </div>
-                                <img
-                                    src={`https://www.natli.ir/upload/prod/md/${item.thumbnail}.jpg`}
-                                    alt={item.title}
-                                    className="w-10 h-10 object-cover rounded"
-                                />
+                                <div className="flex mt-2 gap-1">
+                                    <div className="mt-2">
+                                        <div>
+                                            {item.price.toLocaleString('fa-IR')}&nbsp;ریال
+                                        </div>
+                                    </div>
+                                    {
+                                        isExtraSelected(data.id, item.id) && (
+                                            <Counter id={item.id}
+                                             quantity={getExtraById(data, item.id)?.quantity || 1}
+                                             onChange={(id, newQty) => onExtraCounterChange(data, id, newQty)}/>)
+                                    }
+
+                                </div>
                             </div>
                         ))}
                     </div>

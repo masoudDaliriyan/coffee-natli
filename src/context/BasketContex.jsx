@@ -15,6 +15,7 @@ export function BasketProvider({ children }) {
     });
 
     useEffect(() => {
+        console.log('item',items)
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
     }, [items]);
 
@@ -22,45 +23,43 @@ export function BasketProvider({ children }) {
 
     const getItem = (itemId) => items.find((item) => item.id === itemId);
 
-    function addExtraToItem(itemId, extraItem) {
+    const addExtraToItem = (itemId, extraItem) => {
+
         setItems(currentItems => {
             return currentItems.map(item => {
                 if (item.id !== itemId) return item;
 
-                const extras = item.extras || [];
-                // Only add if not already present
-                if (!extras.find(e => e.id === extraItem.id)) {
-                    return { ...item, extras: [...extras, extraItem] };
+                const extras = item.extra || [];
+                // Check if extra already exists
+                const existingExtra = extras.find(e => e.id === extraItem.id);
+                if (!existingExtra) {
+                    return { ...item, extra: [...extras, { ...extraItem,quantity:1 }] };
                 }
                 return item;
             });
         });
-    }
+    };
 
-    function removeExtraFromItem(itemId, extraId) {
+    const removeExtraFromItem = (itemId, extraId) => {
+
         setItems(currentItems => {
             return currentItems.map(item => {
                 if (item.id !== itemId) return item;
+                const extras = item.extra || [];
+                const newExtras = extras.filter(e => String(e.id) !== String(extraId.id));
 
-                const extras = item.extras || [];
-                // Remove the extra if it exists
-                const newExtras = extras.filter(e => e.id !== extraId);
+                if (newExtras.length === extras.length) {
+                    return item;
+                }
 
-                return { ...item, extras: newExtras };
+                return { ...item, extra: newExtras };
             });
         });
-    }
+    };
 
     const addItem = (newItem) => {
         setItems((currentItems) => {
-            const existingItem = currentItems.find((item) => item.id === newItem.id);
-            if (!existingItem)
-                return [...currentItems, { ...newItem, quantity: newItem.quantity || 1 }];
-            return currentItems.map((item) =>
-                item.id === newItem.id
-                    ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
-                    : item
-            );
+            return [...currentItems, { ...newItem }];
         });
     };
 
@@ -68,26 +67,61 @@ export function BasketProvider({ children }) {
         setItems((currentItems) => currentItems.filter((item) => item.id !== itemId));
     };
 
-    const clearBasket = () => setItems([]);
+    const clearBasket = () => {
+        setItems([]);
+    };
 
     const updateQuantity = (itemId, newQuantity) => {
         setItems((currentItems) =>
             currentItems.map((item) =>
-                item.id === itemId ? { ...item, quantity: newQuantity } : item
+                item.id === itemId ? { ...item, quantity: Math.max(0, newQuantity) } : item
             )
+        );
+    };
+
+    const updateQuantityItemExtra = (basketItem, extraId, newQuantity) => {
+        setItems((currentItems) =>
+            currentItems.map((item) => {
+                if (item.id !== basketItem.id) return item;
+
+                const updatedExtras = (item.extra || []).map((extra) =>
+                    extra.id === extraId ? { ...extra, quantity: Math.max(0, newQuantity) } : extra
+                );
+
+
+                return { ...item, extra: updatedExtras };
+            })
         );
     };
 
     const isExtraSelected = (itemId, extraId) => {
         const item = items.find(i => i.id === itemId);
-        if (!item || !item.extras) return false;
-        return item.extras.some(e => e.id === extraId);
+        if (!item || !item.extra) return false;
+        return item.extra.some(e => String(e.id) === String(extraId));
     };
 
     const isItemExist = (id) => items.some((item) => item.id === id);
 
+    const getExtraById = (item, extraItemId) => {
+        if (!item || !item.extra) return undefined;
+        const basketItem =  getItem(item.id)
+
+        basketItem.extra.map(console.log)
+
+
+        return getItem(item.id).extra.find(extra =>extra.id === extraItemId);
+    };
+
+    const getItemTotal = (item) => {
+        const itemTotal = item.price * item.quantity;
+        const extrasTotal = (item.extra || []).reduce((total, extra) =>
+            total + (extra.price * (extra.quantity || 1)), 0
+        );
+        return (itemTotal + extrasTotal) * item.quantity;
+    };
+
     // Computed values
-    const basketTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
+    const basketTotal = items.reduce((total, item) => total + getItemTotal(item), 0);
     const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
     const contextValue = {
@@ -103,7 +137,10 @@ export function BasketProvider({ children }) {
         isItemExist,
         isExtraSelected,
         addExtraToItem,
-        removeExtraFromItem
+        removeExtraFromItem,
+        updateQuantityItemExtra,
+        getExtraById,
+        getItemTotal
     };
 
     return <BasketContext.Provider value={contextValue}>{children}</BasketContext.Provider>;

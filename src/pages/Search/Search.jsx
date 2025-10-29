@@ -47,9 +47,7 @@ export default function SearchProducts() {
                 />
             </div>
 
-            {products && <ProductList
-                products={filteredProducts}
-            />}
+             <ProductList products={filteredProducts}/>
         </div>
     );
 }

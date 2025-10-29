@@ -17,11 +17,20 @@ export default function Basket() {
     const params = useParams();
 
     useEffect(() => {
-        setTableNumber(params.tableNumber)
+        if(params.tableNumber){
+            setTableNumber(params.tableNumber)
+        }
     }, []);
 
+    const IsValidTableNumber = (value) => {
+        return !isNaN(value) && Number.isInteger(Number(value));
+    };
+
     const handleChange = (e) => {
-        setTableNumber(e.target.value);
+        const {value} = e.target
+        if(IsValidTableNumber(value)){
+            setTableNumber(e.target.value || ' ');
+        }
     };
 
 
@@ -47,7 +56,7 @@ export default function Basket() {
 
         try {
             const payload = {
-                tableNo: tableNumber||routeTableNumber,
+                tableNo: tableNumber,
                 coupon: "",    // optional
                 prods: basketItems.map(item => ({
                     id: item.id,
@@ -59,18 +68,22 @@ export default function Basket() {
             // Step 1: Check order
             const checkRes = await orderCheck(payload);
 
+
             // Step 2: Add order (submit)
             const addRes = await orderAdd({
                 ...payload,
                 payType: 1,
             });
 
+            console.log(addRes)
+
+
 
             if(addRes.message && addRes.status===0){
                 setError(addRes.message)
             }
             if (addRes.data?.redirect) {
-                window.location.href = addRes.data.redirect
+                // window.location.href = addRes.data.redirect
             }
 
         } catch (err) {
@@ -87,7 +100,7 @@ export default function Basket() {
                 <label className="block text-sm font-medium mb-2">شماره میز</label>
                 <TextInput
                     type="text"
-                    value={tableNumber}
+                    value={tableNumber || ''}
                     onChange={handleChange}
                     className="text-right w-[50%] border p-1 rounded"
                 />
@@ -129,7 +142,7 @@ export default function Basket() {
                                     </div>
                                     <div className="mt-2">
                                         <div className="list-disc list-inside">
-                                            {item.extras.map(extra => (
+                                            {item.extra.map(extra => (
                                                 <div key={extra.id}>
                                                     {extra.title} - {extra.price.toLocaleString("fa-IR")} تومان
                                                 </div>

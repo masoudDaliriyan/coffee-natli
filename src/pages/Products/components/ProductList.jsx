@@ -20,6 +20,8 @@ export default function ProductList({ products, activeItem }) {
         if (activeItem) scrollToCategory(activeItem);
     }, [activeItem,products]);
 
+
+
     return (
         <>
             {products.cats.map((cat) => (
