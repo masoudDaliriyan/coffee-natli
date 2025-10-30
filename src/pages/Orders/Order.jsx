@@ -3,6 +3,7 @@ import { myOrders, payOrder } from "../../services/api.js";
 import DefaultSkeleton from "../../components/DefaultSkeleton/DefaultSkeleton.jsx";
 import ArrowUp from '../../../public/icons/arrowUp.svg';
 import ArrowDown from '../../../public/icons/arrowDown.svg';
+import Error from '../../components/Error/Error.jsx'
 
 export default function Orders() {
     const [orders, setOrders] = useState([]);
@@ -82,7 +83,7 @@ export default function Orders() {
 
     return (
         <div className="p-4 max-w-5xl mx-auto">
-            {error && <p className="text-center text-red-600 mt-10">{error}</p>}
+            {error && <Error message={error}/>}
 
             <h1 className="text-2xl font-bold mb-6 text-gray-800">سفارشات من</h1>
 

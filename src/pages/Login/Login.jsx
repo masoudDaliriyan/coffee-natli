@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext.jsx"; // import the auth cont
 import LinkText from "../../components/LinkText/LinkText.jsx";
 import {RootLink} from "../../components/RootLink/RootLink.jsx";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
-
+import Error from '../../components/Error/Error.jsx'
 const Login = () => {
     const { login, loading } = useAuth();
     const rootNavigate = useRootNavigate();
@@ -44,11 +44,8 @@ const Login = () => {
     return (
         <div className="p-6 md:p-8">
             <h2 className="text-2xl font-bold mb-6 text-center">ورود به حساب</h2>
-
             {error && (
-                <div className="mb-4 text-red-500 text-sm font-medium text-center">
-                    {error}
-                </div>
+               <Error message={error}/>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">

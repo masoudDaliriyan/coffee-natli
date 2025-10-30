@@ -5,6 +5,7 @@ import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { orderCheck, orderAdd } from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
+import Error from '../../components/Error/Error.jsx'
 export default function Basket() {
     const {
         items: basketItems,
@@ -163,7 +164,7 @@ export default function Basket() {
                         </div>
 
                         {error && (
-                            <div className="text-red-600 text-sm mb-2">{error}</div>
+                            <Error message={error}/>
                         )}
                         <Button
                             onClick={handleCheckout}

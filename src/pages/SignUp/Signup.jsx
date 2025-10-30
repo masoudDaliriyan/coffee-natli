@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext.jsx"; // import the context
 import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 import PersianDateInput from "../../components/PersianDataInput/PersianDateInput.jsx";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
+import Error from '../../components/Error/Error.jsx'
 
 const Signup = () => {
     const { register, loading } = useAuth();
@@ -113,7 +114,11 @@ const Signup = () => {
                 onChange={handleChange}
             />
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {
+               error && (
+                   <Error message={error}/>
+                )
+            }
             {success && <p className="text-green-600 text-sm">{success}</p>}
 
             <Button

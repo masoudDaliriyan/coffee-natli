@@ -3,6 +3,7 @@ import TextInput from "../../components/Input/Input.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { resetPassword } from "../../services/api.js";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
+import Error from '../../components/Error/Error.jsx'
 
 const ResetPassword = () => {
     const rootNavigate = useRootNavigate();
@@ -45,10 +46,9 @@ const ResetPassword = () => {
             <h2 className="text-2xl font-bold mb-6 text-center">بازیابی رمز عبور</h2>
 
             {error && (
-                <div className="mb-4 text-red-500 text-sm font-medium text-center">
-                    {error}
-                </div>
+                <Error message={error}/>
             )}
+
             {message && (
                 <div className="mb-4 text-green-600 text-sm font-medium text-center">
                     {message}

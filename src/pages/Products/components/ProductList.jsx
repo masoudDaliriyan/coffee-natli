@@ -31,7 +31,7 @@ export default function ProductList({ products, activeItem }) {
                     className="mb-6"
                 >
                     <Divider>{cat.cat_title}</Divider>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 mb-20">
+                    <div className="grid grid-cols-1  gap-4 mt-4 mb-20">
                         {products.prods
                             .filter((p) => p.cat_id === cat.cat_id)
                             .map((product) => (

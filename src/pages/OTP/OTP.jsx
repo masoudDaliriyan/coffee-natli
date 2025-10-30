@@ -4,6 +4,7 @@ import Button from "../../components/Button/Button.jsx";
 import Input from "../../components/Input/Input.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
+import Error from '../../../src/components/Error/Error.jsx'
 
 export default function OTP() {
     const { mobile: routeMobile } = useParams();
@@ -83,9 +84,11 @@ export default function OTP() {
                 <span className="font-semibold">{mobile}</span> را وارد کنید
             </p>
 
-            {error && (
-                <p className="text-red-500 text-sm text-center mb-2">{error}</p>
-            )}
+            {
+                error && (
+                    <Error message={error} />
+                )
+            }
 
             <div className="flex flex-row-reverse justify-center gap-2 mb-6">
                 {otp.map((digit, index) => (
