@@ -57,9 +57,40 @@ export default function Basket()
         if (item) updateQuantity(id, Math.max(item.quantity - 1, 1));
     };
 
+    const changePayloadForBackend = (basketItems) =>
+    {
+        const result = [];
+
+        basketItems.forEach(item =>
+        {
+            // Add the main item
+            result.push({
+                id: item.id,
+                amount: item.quantity,
+                extra_of: null
+            });
+
+            // If the item has extras, add them as separate entries
+            if (Array.isArray(item.extra) && item.extra.length > 0)
+            {
+                item.extra.forEach(extra =>
+                {
+                    result.push({
+                        id: extra.id,
+                        amount: extra.quantity,
+                        extra_of: item.id
+                    });
+                });
+            }
+        });
+
+        return result;
+    };
+
     const handleCheckout = async () =>
     {
         if (!basketItems.length) return;
+        const payloadItems = changePayloadForBackend(basketItems);
 
         setLoading(true);
         setError("");
@@ -69,18 +100,9 @@ export default function Basket()
             const payload = {
                 tableNo: tableNumber,
                 coupon: "",    // optional
-                prods: basketItems.map(item => ({
-                    id: item.id,
-                    amount: item.quantity,
-                    extra_of: null
-                })),
+                prods: payloadItems,
             };
 
-            // Step 1: Check order
-            const checkRes = await orderCheck(payload);
-
-
-            // Step 2: Add order (submit)
             const addRes = await orderAdd({
                 ...payload,
                 payType: 1,
