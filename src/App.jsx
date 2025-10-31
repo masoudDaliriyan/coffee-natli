@@ -1,6 +1,7 @@
 import './App.css';
 import { useEffect, useState } from "react";
-import {
+import
+{
     BrowserRouter as Router,
     Routes,
     Route,
@@ -19,7 +20,8 @@ import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
 import SearchableProductList from "./pages/Search/Search.jsx";
 import Rest from "./pages/Rest/Rest.jsx";
 import StoreInfo from "./pages/StoreInfo/StoreInfo.jsx";
-function NotFound() {
+function NotFound()
+{
     return <div>Page not found</div>;
 }
 
@@ -30,20 +32,22 @@ const branches = [
     "dibaji"
 ];
 
-function AppWrapper() {
+function AppWrapper()
+{
 
     return (
         <Router basename="/coffee-shop">
             <Routes>
-                <Route path="/:unique_name/:tableNumber?/*" element={<App />} />
-                <Route path="/404" element={<NotFound />} />
-                <Route path="*" element={<Navigate to="/404" replace />} />
+                <Route path="/:unique_name/:tableNumber?/*" element={ <App /> } />
+                <Route path="/404" element={ <NotFound /> } />
+                <Route path="*" element={ <Navigate to="/404" replace /> } />
             </Routes>
         </Router>
     );
 }
 
-function App() {
+function App()
+{
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
@@ -52,26 +56,26 @@ function App() {
     return (
         <>
             <Sidebar
-                isOpen={isSidebarOpen}
-                onClose={() => setIsSidebarOpen(false)}
+                isOpen={ isSidebarOpen }
+                onClose={ () => setIsSidebarOpen(false) }
             />
             <Products />
             <Routes>
-                <Route path="rders" element={<ModalRoute><Orders /></ModalRoute>} />
-                <Route path="signup" element={<ModalRoute><Signup /></ModalRoute>} />
-                <Route path="otp/:mobile" element={<ModalRoute><OTP /></ModalRoute>} />
-                <Route path="login" element={<ModalRoute><Login /></ModalRoute>} />
-                <Route path="/basket" element={<ModalRoute><Basket /></ModalRoute>} />
-                <Route path="search" element={<ModalRoute><SearchableProductList /></ModalRoute>} />
-                <Route path="info" element={<ModalRoute><StoreInfo /></ModalRoute>} />
-                <Route path="reset" element={<ModalRoute><Rest /></ModalRoute>} />
+                <Route path="orders" element={ <ModalRoute><Orders /></ModalRoute> } />
+                <Route path="signup" element={ <ModalRoute><Signup /></ModalRoute> } />
+                <Route path="otp/:mobile" element={ <ModalRoute><OTP /></ModalRoute> } />
+                <Route path="login" element={ <ModalRoute><Login /></ModalRoute> } />
+                <Route path="/basket" element={ <ModalRoute><Basket /></ModalRoute> } />
+                <Route path="search" element={ <ModalRoute><SearchableProductList /></ModalRoute> } />
+                <Route path="info" element={ <ModalRoute><StoreInfo /></ModalRoute> } />
+                <Route path="reset" element={ <ModalRoute><Rest /></ModalRoute> } />
             </Routes>
-            {state && (
-            <Routes>
-                <Route path="/signup" element={<ModalRoute><Signup /></ModalRoute>} />
-                <Route path="/otp" element={<ModalRoute><OTP /></ModalRoute>} />
-            </Routes>
-            )}
+            { state && (
+                <Routes>
+                    <Route path="/signup" element={ <ModalRoute><Signup /></ModalRoute> } />
+                    <Route path="/otp" element={ <ModalRoute><OTP /></ModalRoute> } />
+                </Routes>
+            ) }
         </>
     );
 }

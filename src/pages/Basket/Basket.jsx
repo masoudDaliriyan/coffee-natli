@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBasket } from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
 import { orderCheck, orderAdd } from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
-import Error from '../../components/Error/Error.jsx'
-export default function Basket() {
+import Error from '../../components/Error/Error.jsx';
+export default function Basket()
+{
     const {
         items: basketItems,
         updateQuantity,
@@ -17,19 +18,24 @@ export default function Basket() {
     const [tableNumber, setTableNumber] = useState("");
     const params = useParams();
 
-    useEffect(() => {
-        if(params.tableNumber){
-            setTableNumber(params.tableNumber)
+    useEffect(() =>
+    {
+        if (params.tableNumber)
+        {
+            setTableNumber(params.tableNumber);
         }
     }, []);
 
-    const IsValidTableNumber = (value) => {
+    const IsValidTableNumber = (value) =>
+    {
         return !isNaN(value) && Number.isInteger(Number(value));
     };
 
-    const handleChange = (e) => {
-        const {value} = e.target
-        if(IsValidTableNumber(value)){
+    const handleChange = (e) =>
+    {
+        const { value } = e.target;
+        if (IsValidTableNumber(value))
+        {
             setTableNumber(e.target.value || ' ');
         }
     };
@@ -39,23 +45,27 @@ export default function Basket() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const increaseQuantity = (id) => {
+    const increaseQuantity = (id) =>
+    {
         const item = basketItems.find(item => item.id === id);
         if (item) updateQuantity(id, item.quantity + 1);
     };
 
-    const decreaseQuantity = (id) => {
+    const decreaseQuantity = (id) =>
+    {
         const item = basketItems.find(item => item.id === id);
         if (item) updateQuantity(id, Math.max(item.quantity - 1, 1));
     };
 
-    const handleCheckout = async () => {
+    const handleCheckout = async () =>
+    {
         if (!basketItems.length) return;
 
         setLoading(true);
         setError("");
 
-        try {
+        try
+        {
             const payload = {
                 tableNo: tableNumber,
                 coupon: "",    // optional
@@ -76,20 +86,24 @@ export default function Basket() {
                 payType: 1,
             });
 
-            console.log(addRes)
+            console.log(addRes);
 
 
 
-            if(addRes.message && addRes.status===0){
-                setError(addRes.message)
+            if (addRes.message && addRes.status === 0)
+            {
+                setError(addRes.message);
             }
-            if (addRes.data?.redirect) {
+            if (addRes.data?.redirect)
+            {
                 // window.location.href = addRes.data.redirect
             }
 
-        } catch (err) {
+        } catch (err)
+        {
             setError(err.message || "خطا در ثبت سفارش");
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
     };
@@ -101,40 +115,40 @@ export default function Basket() {
                 <label className="block text-sm font-medium mb-2">شماره میز</label>
                 <TextInput
                     type="text"
-                    value={tableNumber || ''}
-                    onChange={handleChange}
+                    value={ tableNumber === "0" ? "" : tableNumber || "" }
+                    onChange={ handleChange }
                     className="text-right w-[50%] border p-1 rounded"
                 />
                 <div className="mt-4"></div>
-                {basketItems.length === 0 ? (
+                { basketItems.length === 0 ? (
                     <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
                 ) : (
                     <>
                         <div>
-                            {basketItems.map(item => (
+                            { basketItems.map(item => (
                                 <div
-                                    key={item.id}
+                                    key={ item.id }
                                     className="flex flex-col gap-3 p-3 mb-3 border border-gray-200 rounded-lg bg-white shadow-sm"
                                 >
                                     <div className="flex items-center gap-3">
                                         <img
-                                            src={`https://www.natli.ir/upload/prod/md/${item.image}.jpg`}
-                                            alt={item.title}
+                                            src={ `https://www.natli.ir/upload/prod/md/${ item.image }.jpg` }
+                                            alt={ item.title }
                                             className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
                                         />
                                         <div className="flex flex-col flex-1 text-right">
-                                            <div className="text-base font-semibold mb-2">{item.title}</div>
+                                            <div className="text-base font-semibold mb-2">{ item.title }</div>
                                             <div className="text-gray-600 text-sm mt-1 mb-2">
                                                 <span>
-                                                    {Number(item.price * item.quantity).toLocaleString("fa-IR")}
+                                                    { Number(item.price * item.quantity).toLocaleString("fa-IR") }
                                                 </span>
                                                 <span> تومان</span>
                                             </div>
                                             <div className="mt-2">
                                                 <Counter
-                                                    id={item.id}
-                                                    quantity={item.quantity}
-                                                    onChange={(id, newQty) => updateQuantity(id, newQty)}
+                                                    id={ item.id }
+                                                    quantity={ item.quantity }
+                                                    onChange={ (id, newQty) => updateQuantity(id, newQty) }
                                                 />
                                             </div>
 
@@ -143,44 +157,44 @@ export default function Basket() {
                                     </div>
                                     <div className="mt-2">
                                         <div className="list-disc list-inside">
-                                            {item.extra.map(extra => (
-                                                <div key={extra.id}>
-                                                    {extra.title} - {extra.price.toLocaleString("fa-IR")} تومان
+                                            { item.extra.map(extra => (
+                                                <div key={ extra.id }>
+                                                    { extra.title } - { extra.price.toLocaleString("fa-IR") } تومان
                                                 </div>
-                                            ))}
+                                            )) }
                                         </div>
                                     </div>
 
                                     <div className="flex justify-end">
                                         <button
-                                            onClick={() => removeItem(item.id)}
+                                            onClick={ () => removeItem(item.id) }
                                             className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600"
                                         >
                                             حذف
                                         </button>
                                     </div>
                                 </div>
-                            ))}
+                            )) }
                         </div>
 
-                        {error && (
-                            <Error message={error}/>
-                        )}
+                        { error && (
+                            <Error message={ error } />
+                        ) }
                         <Button
-                            onClick={handleCheckout}
-                            disabled={loading}
+                            onClick={ handleCheckout }
+                            disabled={ loading }
                             className="w-full py-4 flex justify-center gap-2 items-center"
                             variant="success"
                         >
-                            {loading ? "در حال پردازش..." : (
+                            { loading ? "در حال پردازش..." : (
                                 <>
-                                    <span>{basketTotal?.toLocaleString("fa-IR")}&nbsp;تومان</span>
+                                    <span>{ basketTotal?.toLocaleString("fa-IR") }&nbsp;تومان</span>
                                     <span>پرداخت</span>
                                 </>
-                            )}
+                            ) }
                         </Button>
                     </>
-                )}
+                ) }
             </div>
         </>
     );

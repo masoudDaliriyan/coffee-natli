@@ -1,56 +1,61 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import TextInput from "../Input/Input.jsx";
 import Button from "../Button/Button.jsx";
-import {useSidebar} from "../../context/SidebarContext.jsx";
-import {useBasket} from "../../context/BasketContex.jsx";
-import {useAuth} from "../../context/AuthContext.jsx";
-import {useRootNavigate} from "../../utils/RootNavigate.js";
+import { useSidebar } from "../../context/SidebarContext.jsx";
+import { useBasket } from "../../context/BasketContex.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useRootNavigate } from "../../utils/RootNavigate.js";
 
-export default function Footer() {
+export default function Footer()
+{
     const [searchTerm, setSearchTerm] = useState("");
-    const {isAuthenticated} =  useAuth()
-    const {toggleSidebar} = useSidebar();
-    const {items} = useBasket()
-    const rootNavigate = useRootNavigate()
+    const { isAuthenticated } = useAuth();
+    const { toggleSidebar } = useSidebar();
+    const { items } = useBasket();
+    const rootNavigate = useRootNavigate();
 
-    const handleSearch = () => {
+    const handleSearch = () =>
+    {
         console.log("Searching for:", searchTerm);
     };
 
-    const handelOnclickBasket = () => {
-        if(isAuthenticated){
-            rootNavigate("/basket")
-        }else{
-            rootNavigate("login?from=/basket")
+    const handelOnclickBasket = () =>
+    {
+        if (isAuthenticated)
+        {
+            rootNavigate("basket");
+        } else
+        {
+            rootNavigate("login?from=/basket");
         }
-    }
+    };
 
     return (
         <div className="fixed bottom-0 left-0 w-full bg-white p-4 flex justify-center border-t border-gray-200">
             <div className="w-full max-w-3xl flex gap-2">
                 <Button
                     variant="secondary"
-                    onClick={toggleSidebar}
+                    onClick={ toggleSidebar }
                     className="w-[100px] flex items-center justify-center">
                     منو
                 </Button>
                 <TextInput
                     placeholder="جستجو..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={ searchTerm }
+                    onChange={ (e) => setSearchTerm(e.target.value) }
                     className="flex-1"
-                    readOnly={true}
-                    onClick={() => rootNavigate("/search")}
+                    readOnly={ true }
+                    onClick={ () => rootNavigate("/search") }
                 />
-                {items.length > 0 && (
-                        <Button
-                            onClick={handelOnclickBasket}
-                            variant="secondary"
-                            className="w-[100px] flex items-center justify-center bg-green-700"
-                       >
-                            سبد خرید
-                        </Button>
-                )}
+                { items.length > 0 && (
+                    <Button
+                        onClick={ handelOnclickBasket }
+                        variant="secondary"
+                        className="w-[100px] flex items-center justify-center bg-green-700"
+                    >
+                        سبد خرید
+                    </Button>
+                ) }
             </div>
         </div>
     );
