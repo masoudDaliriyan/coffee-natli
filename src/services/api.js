@@ -11,6 +11,7 @@ export function rootNavigate()
 
     // Build the new path
     const finalPath = `/${ part1 }/${ part2 }/${ part3 }/`;
+    console.log(finalPath);
 
     // Navigate
     window.location.href = finalPath;
@@ -51,7 +52,8 @@ api.interceptors.request.use((config) =>
 const handleResponse = (res) =>
 {
 
-    if (res.status === -1)
+    console.log(res);
+    if (res?.data?.status === -1)
     {
         localStorage.clear();
         rootNavigate();

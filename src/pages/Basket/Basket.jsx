@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button.jsx";
 import { orderCheck, orderAdd } from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
 import Error from '../../components/Error/Error.jsx';
+import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 export default function Basket()
 {
     const {
@@ -16,6 +17,7 @@ export default function Basket()
     } = useBasket();
 
     const [tableNumber, setTableNumber] = useState("");
+    const [coupon, setCoupon] = useState("");
     const params = useParams();
 
     useEffect(() =>
@@ -40,22 +42,15 @@ export default function Basket()
         }
     };
 
+    const handelCouponChange = (e) =>
+    {
+        setCoupon(e.target.value);
+    };
+
 
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
-    const increaseQuantity = (id) =>
-    {
-        const item = basketItems.find(item => item.id === id);
-        if (item) updateQuantity(id, item.quantity + 1);
-    };
-
-    const decreaseQuantity = (id) =>
-    {
-        const item = basketItems.find(item => item.id === id);
-        if (item) updateQuantity(id, Math.max(item.quantity - 1, 1));
-    };
 
     const changePayloadForBackend = (basketItems) =>
     {
@@ -99,27 +94,35 @@ export default function Basket()
         {
             const payload = {
                 tableNo: tableNumber,
-                coupon: "",    // optional
+                coupon: coupon,
                 prods: payloadItems,
             };
 
-            const addRes = await orderAdd({
+            const checkOrderRes = await orderCheck({
                 ...payload,
                 payType: 1,
             });
 
-            console.log(addRes);
+            console.log(checkOrderRes);
+
+            // const addRes = await orderAdd({
+            //     ...payload,
+            //     payType: 1,
+            // });
+
+            // orderCheck;
+            // console.log(addRes);
 
 
 
-            if (addRes.message && addRes.status === 0)
-            {
-                setError(addRes.message);
-            }
-            if (addRes.data?.redirect)
-            {
-                // window.location.href = addRes.data.redirect
-            }
+            // if (addRes.message && addRes.status === 0)
+            // {
+            // setError(addRes.message);
+            // }
+            // if (addRes.data?.redirect)
+            // {
+            // window.location.href = addRes.data.redirect
+            // }
 
         } catch (err)
         {
@@ -134,13 +137,26 @@ export default function Basket()
         <>
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
-                <label className="block text-sm font-medium mb-2">شماره میز</label>
-                <TextInput
-                    type="text"
-                    value={ tableNumber === "0" ? "" : tableNumber || "" }
-                    onChange={ handleChange }
-                    className="text-right w-[50%] border p-1 rounded"
-                />
+                <div className="flex gap-8">
+                    <div className="w-1/2">
+                        <label className="block text-sm font-medium mb-2">شماره میز</label>
+                        <TextInput
+                            type="text"
+                            value={ tableNumber === "0" ? "" : tableNumber || "" }
+                            onChange={ handleChange }
+                            className="text-right w-full border p-1 rounded"
+                        />
+                    </div>
+                    <div className="w-1/2">
+                        <label className="block text-sm font-medium mb-2">کد تخفیف</label>
+                        <TextInput
+                            value={ coupon === "0" ? "" : coupon || "" }
+                            onChange={ handelCouponChange }
+                            type="text"
+                            className="text-right w-full border p-1 rounded"
+                        />
+                    </div>
+                </div>
                 <div className="mt-4"></div>
                 { basketItems.length === 0 ? (
                     <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
@@ -210,8 +226,7 @@ export default function Basket()
                         >
                             { loading ? "در حال پردازش..." : (
                                 <>
-                                    <span>{ basketTotal?.toLocaleString("fa-IR") }&nbsp;تومان</span>
-                                    <span>پرداخت</span>
+                                    <span>بررسی نهایی و پرداخت</span>
                                 </>
                             ) }
                         </Button>
