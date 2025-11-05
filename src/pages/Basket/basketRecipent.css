@@ -1,0 +1,11 @@
+.receipt-table,
+.receipt-table th,
+.receipt-table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 6px;
+}
+
+.receipt-table {
+    width: 100%;
+}

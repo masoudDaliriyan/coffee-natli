@@ -1,15 +1,17 @@
 import './App.css';
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import
 {
     BrowserRouter as Router,
     Routes,
     Route,
+    useNavigate,
     useLocation, useParams, Navigate,
 } from "react-router-dom";
 
+import { branches } from "../branches.json";
+const DEFAULT_TABLE = 0;
 import Products from './pages/Products/Products.jsx';
-import { ProductDetails } from "./pages/Product/ProductDetail.jsx";
 import Basket from "./pages/Basket/Basket.jsx";
 import Orders from "./pages/Orders/Order.jsx";
 import Login from "./pages/Login/Login.jsx";
@@ -22,15 +24,9 @@ import Rest from "./pages/Rest/Rest.jsx";
 import StoreInfo from "./pages/StoreInfo/StoreInfo.jsx";
 function NotFound()
 {
-    return <div>Page not found</div>;
+    return <div style={ { textAlign: 'center', padding: '20px' } }>صفحه مورد نظر شما پیدا نشد</div>;
 }
 
-const branches = [
-    "sohrevardi-1",
-    "sohrevardi-2",
-    "poonak",
-    "dibaji"
-];
 
 function AppWrapper()
 {
@@ -49,9 +45,42 @@ function AppWrapper()
 function App()
 {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate();
+    const { unique_name, tableNumber } = useParams();
+
     const location = useLocation();
 
     const state = location.state && location.state.background;
+
+    useEffect(() =>
+    {
+
+        const tableNumberValue = Number(tableNumber);
+        const isTableNumberMissing = !tableNumber || isNaN(tableNumberValue);
+        const hasRouteInsteadOfTableNumber = typeof tableNumber === "string" && !tableNumberValue;
+
+        if (isTableNumberMissing)
+        {
+            navigate(`/${ unique_name }/${ DEFAULT_TABLE }/`, { replace: true });
+        }
+
+        if (hasRouteInsteadOfTableNumber)
+        {
+            navigate(`/${ unique_name }/${ DEFAULT_TABLE }/${ tableNumber }`, { replace: true });
+        }
+
+    }, []);
+
+    useEffect(() =>
+    {
+        if (branches.includes(unique_name))
+        {
+            navigate(`/${ unique_name }/${ DEFAULT_TABLE }/`, { replace: true });
+        } else
+        {
+            navigate("/404", { replace: true });
+        }
+    }, []);
 
     return (
         <>

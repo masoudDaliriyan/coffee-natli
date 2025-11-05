@@ -3,19 +3,20 @@ import { useParams } from "react-router-dom";
 import { useBasket } from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
-import { orderCheck, orderAdd } from "../../services/api.js";
+import { orderCheck } from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
 import Error from '../../components/Error/Error.jsx';
 import SelectInput from "../../components/SelectInput/SelectInput.jsx";
+import BasketReceipt from "./‌BasketReceipt.jsx";
 export default function Basket()
 {
     const {
         items: basketItems,
         updateQuantity,
         removeItem,
-        basketTotal,
     } = useBasket();
-
+    const [isShowRecipt, setIsShowRecipt] = useState(false);
+    const [recipient, setRecipient] = useState("");
     const [tableNumber, setTableNumber] = useState("");
     const [coupon, setCoupon] = useState("");
     const params = useParams();
@@ -103,7 +104,15 @@ export default function Basket()
                 payType: 1,
             });
 
-            console.log(checkOrderRes);
+            if (checkOrderRes.status == 0)
+            {
+                setError(checkOrderRes.message);
+            }
+
+            console.log(checkOrderRes.data);
+
+            setRecipient(checkOrderRes.data);
+            setIsShowRecipt(true);
 
             // const addRes = await orderAdd({
             //     ...payload,
@@ -158,80 +167,89 @@ export default function Basket()
                     </div>
                 </div>
                 <div className="mt-4"></div>
-                { basketItems.length === 0 ? (
-                    <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
-                ) : (
-                    <>
-                        <div>
-                            { basketItems.map(item => (
-                                <div
-                                    key={ item.id }
-                                    className="flex flex-col gap-3 p-3 mb-3 border border-gray-200 rounded-lg bg-white shadow-sm"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <img
-                                            src={ `https://www.natli.ir/upload/prod/md/${ item.image }.jpg` }
-                                            alt={ item.title }
-                                            className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
-                                        />
-                                        <div className="flex flex-col flex-1 text-right">
-                                            <div className="text-base font-semibold mb-2">{ item.title }</div>
-                                            <div className="text-gray-600 text-sm mt-1 mb-2">
-                                                <span>
-                                                    { Number(item.price * item.quantity).toLocaleString("fa-IR") }
-                                                </span>
-                                                <span> تومان</span>
-                                            </div>
-                                            <div className="mt-2">
-                                                <Counter
-                                                    id={ item.id }
-                                                    quantity={ item.quantity }
-                                                    onChange={ (id, newQty) => updateQuantity(id, newQty) }
-                                                />
-                                            </div>
+                {
+                    basketItems.length === 0 && (
+                        <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
+                    )
 
-                                        </div>
-
-                                    </div>
-                                    <div className="mt-2">
-                                        <div className="list-disc list-inside">
-                                            { item.extra.map(extra => (
-                                                <div key={ extra.id }>
-                                                    { extra.title } - { extra.price.toLocaleString("fa-IR") } تومان
+                }
+                {
+                    isShowRecipt && (<BasketReceipt recipientData={ recipient } />)
+                }
+                {
+                    !isShowRecipt && basketItems.length && (
+                        <>
+                            <div>
+                                { basketItems.map(item => (
+                                    <div
+                                        key={ item.id }
+                                        className="flex flex-col gap-3 p-3 mb-3 border border-gray-200 rounded-lg bg-white shadow-sm"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <img
+                                                src={ `https://www.natli.ir/upload/prod/md/${ item.image }.jpg` }
+                                                alt={ item.title }
+                                                className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
+                                            />
+                                            <div className="flex flex-col flex-1 text-right">
+                                                <div className="text-base font-semibold mb-2">{ item.title }</div>
+                                                <div className="text-gray-600 text-sm mt-1 mb-2">
+                                                    <span>
+                                                        { Number(item.price * item.quantity).toLocaleString("fa-IR") }
+                                                    </span>
+                                                    <span> تومان</span>
                                                 </div>
-                                            )) }
+                                                <div className="mt-2">
+                                                    <Counter
+                                                        id={ item.id }
+                                                        quantity={ item.quantity }
+                                                        onChange={ (id, newQty) => updateQuantity(id, newQty) }
+                                                    />
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div className="mt-2">
+                                            <div className="list-disc list-inside">
+                                                { item.extra.map(extra => (
+                                                    <div key={ extra.id }>
+                                                        { extra.title } - { extra.price.toLocaleString("fa-IR") } تومان
+                                                    </div>
+                                                )) }
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end">
+                                            <button
+                                                onClick={ () => removeItem(item.id) }
+                                                className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600"
+                                            >
+                                                حذف
+                                            </button>
                                         </div>
                                     </div>
+                                )) }
+                            </div>
 
-                                    <div className="flex justify-end">
-                                        <button
-                                            onClick={ () => removeItem(item.id) }
-                                            className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600"
-                                        >
-                                            حذف
-                                        </button>
-                                    </div>
-                                </div>
-                            )) }
-                        </div>
-
-                        { error && (
-                            <Error message={ error } />
-                        ) }
-                        <Button
-                            onClick={ handleCheckout }
-                            disabled={ loading }
-                            className="w-full py-4 flex justify-center gap-2 items-center"
-                            variant="success"
-                        >
-                            { loading ? "در حال پردازش..." : (
-                                <>
-                                    <span>بررسی نهایی و پرداخت</span>
-                                </>
+                            { error && (
+                                <Error message={ error } />
                             ) }
-                        </Button>
-                    </>
-                ) }
+                            <Button
+                                onClick={ handleCheckout }
+                                disabled={ loading }
+                                className="w-full py-4 flex justify-center gap-2 items-center"
+                                variant="success"
+                            >
+                                { loading ? "در حال پردازش..." : (
+                                    <>
+                                        <span>بررسی نهایی و پرداخت</span>
+                                    </>
+                                ) }
+                            </Button>
+                        </>
+                    )
+                }
             </div>
         </>
     );
