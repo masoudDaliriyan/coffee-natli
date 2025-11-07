@@ -4,18 +4,26 @@ const BasketContext = createContext();
 
 const LOCAL_STORAGE_KEY = "basket_items";
 
-export function BasketProvider({ children }) {
-    const [items, setItems] = useState(() => {
-        try {
+export function BasketProvider({ children })
+{
+    const [items, setItems] = useState(() =>
+    {
+        try
+        {
             const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
             return stored ? JSON.parse(stored) : [];
-        } catch {
+        } catch
+        {
             return [];
         }
     });
 
-    useEffect(() => {
-        console.log('item',items)
+    const [tableNumber, setTableNumber] = useState("");
+    const [coupon, setCoupon] = useState("");
+
+
+    useEffect(() =>
+    {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
     }, [items]);
 
@@ -23,32 +31,40 @@ export function BasketProvider({ children }) {
 
     const getItem = (itemId) => items.find((item) => item.id === itemId);
 
-    const addExtraToItem = (itemId, extraItem) => {
+    const addExtraToItem = (itemId, extraItem) =>
+    {
 
-        setItems(currentItems => {
-            return currentItems.map(item => {
+        setItems(currentItems =>
+        {
+            return currentItems.map(item =>
+            {
                 if (item.id !== itemId) return item;
 
                 const extras = item.extra || [];
                 // Check if extra already exists
                 const existingExtra = extras.find(e => e.id === extraItem.id);
-                if (!existingExtra) {
-                    return { ...item, extra: [...extras, { ...extraItem,quantity:1 }] };
+                if (!existingExtra)
+                {
+                    return { ...item, extra: [...extras, { ...extraItem, quantity: 1 }] };
                 }
                 return item;
             });
         });
     };
 
-    const removeExtraFromItem = (itemId, extraId) => {
+    const removeExtraFromItem = (itemId, extraId) =>
+    {
 
-        setItems(currentItems => {
-            return currentItems.map(item => {
+        setItems(currentItems =>
+        {
+            return currentItems.map(item =>
+            {
                 if (item.id !== itemId) return item;
                 const extras = item.extra || [];
                 const newExtras = extras.filter(e => String(e.id) !== String(extraId.id));
 
-                if (newExtras.length === extras.length) {
+                if (newExtras.length === extras.length)
+                {
                     return item;
                 }
 
@@ -57,21 +73,26 @@ export function BasketProvider({ children }) {
         });
     };
 
-    const addItem = (newItem) => {
-        setItems((currentItems) => {
+    const addItem = (newItem) =>
+    {
+        setItems((currentItems) =>
+        {
             return [...currentItems, { ...newItem }];
         });
     };
 
-    const removeItem = (itemId) => {
+    const removeItem = (itemId) =>
+    {
         setItems((currentItems) => currentItems.filter((item) => item.id !== itemId));
     };
 
-    const clearBasket = () => {
+    const clearBasket = () =>
+    {
         setItems([]);
     };
 
-    const updateQuantity = (itemId, newQuantity) => {
+    const updateQuantity = (itemId, newQuantity) =>
+    {
         setItems((currentItems) =>
             currentItems.map((item) =>
                 item.id === itemId ? { ...item, quantity: Math.max(0, newQuantity) } : item
@@ -79,9 +100,11 @@ export function BasketProvider({ children }) {
         );
     };
 
-    const updateQuantityItemExtra = (basketItem, extraId, newQuantity) => {
+    const updateQuantityItemExtra = (basketItem, extraId, newQuantity) =>
+    {
         setItems((currentItems) =>
-            currentItems.map((item) => {
+            currentItems.map((item) =>
+            {
                 if (item.id !== basketItem.id) return item;
 
                 const updatedExtras = (item.extra || []).map((extra) =>
@@ -94,7 +117,8 @@ export function BasketProvider({ children }) {
         );
     };
 
-    const isExtraSelected = (itemId, extraId) => {
+    const isExtraSelected = (itemId, extraId) =>
+    {
         const item = items.find(i => i.id === itemId);
         if (!item || !item.extra) return false;
         return item.extra.some(e => String(e.id) === String(extraId));
@@ -102,17 +126,19 @@ export function BasketProvider({ children }) {
 
     const isItemExist = (id) => items.some((item) => item.id === id);
 
-    const getExtraById = (item, extraItemId) => {
+    const getExtraById = (item, extraItemId) =>
+    {
         if (!item || !item.extra) return undefined;
-        const basketItem =  getItem(item.id)
+        const basketItem = getItem(item.id);
 
-        basketItem.extra.map(console.log)
+        basketItem.extra.map(console.log);
 
 
-        return getItem(item.id).extra.find(extra =>extra.id === extraItemId);
+        return getItem(item.id).extra.find(extra => extra.id === extraItemId);
     };
 
-    const getItemTotal = (item) => {
+    const getItemTotal = (item) =>
+    {
         const itemTotal = item.price * item.quantity;
         const extrasTotal = (item.extra || []).reduce((total, extra) =>
             total + (extra.price * (extra.quantity || 1)), 0
@@ -140,13 +166,18 @@ export function BasketProvider({ children }) {
         removeExtraFromItem,
         updateQuantityItemExtra,
         getExtraById,
-        getItemTotal
+        getItemTotal,
+        tableNumber,
+        setTableNumber,
+        coupon,
+        setCoupon
     };
 
-    return <BasketContext.Provider value={contextValue}>{children}</BasketContext.Provider>;
+    return <BasketContext.Provider value={ contextValue }>{ children }</BasketContext.Provider>;
 }
 
-export const useBasket = () => {
+export const useBasket = () =>
+{
     const context = useContext(BasketContext);
     if (!context) throw new Error("useBasket must be used within BasketProvider");
     return context;

@@ -8,17 +8,21 @@ import TextInput from "../../components/Input/Input.jsx";
 import Error from '../../components/Error/Error.jsx';
 import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 import BasketReceipt from "./‌BasketReceipt.jsx";
+import { changePayloadForBackend } from "./basketUtils.js";
+
 export default function Basket()
 {
     const {
         items: basketItems,
         updateQuantity,
         removeItem,
+        tableNumber,
+        setTableNumber,
+        coupon,
+        setCoupon
     } = useBasket();
+    const [recipient, setRecipient] = useState(null);
     const [isShowRecipt, setIsShowRecipt] = useState(false);
-    const [recipient, setRecipient] = useState("");
-    const [tableNumber, setTableNumber] = useState("");
-    const [coupon, setCoupon] = useState("");
     const params = useParams();
 
     useEffect(() =>
@@ -52,36 +56,6 @@ export default function Basket()
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
-    const changePayloadForBackend = (basketItems) =>
-    {
-        const result = [];
-
-        basketItems.forEach(item =>
-        {
-            // Add the main item
-            result.push({
-                id: item.id,
-                amount: item.quantity,
-                extra_of: null
-            });
-
-            // If the item has extras, add them as separate entries
-            if (Array.isArray(item.extra) && item.extra.length > 0)
-            {
-                item.extra.forEach(extra =>
-                {
-                    result.push({
-                        id: extra.id,
-                        amount: extra.quantity,
-                        extra_of: item.id
-                    });
-                });
-            }
-        });
-
-        return result;
-    };
 
     const handleCheckout = async () =>
     {
@@ -146,26 +120,6 @@ export default function Basket()
         <>
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
-                <div className="flex gap-8">
-                    <div className="w-1/2">
-                        <label className="block text-sm font-medium mb-2">شماره میز</label>
-                        <TextInput
-                            type="text"
-                            value={ tableNumber === "0" ? "" : tableNumber || "" }
-                            onChange={ handleChange }
-                            className="text-right w-full border p-1 rounded"
-                        />
-                    </div>
-                    <div className="w-1/2">
-                        <label className="block text-sm font-medium mb-2">کد تخفیف</label>
-                        <TextInput
-                            value={ coupon === "0" ? "" : coupon || "" }
-                            onChange={ handelCouponChange }
-                            type="text"
-                            className="text-right w-full border p-1 rounded"
-                        />
-                    </div>
-                </div>
                 <div className="mt-4"></div>
                 {
                     basketItems.length === 0 && (
@@ -174,11 +128,36 @@ export default function Basket()
 
                 }
                 {
-                    isShowRecipt && (<BasketReceipt recipientData={ recipient } />)
+                    isShowRecipt && (
+                        <>
+                            <h1 className="text-lg font-bold mb-4">رسید خرید نهایی</h1>
+                            <BasketReceipt recipientData={ recipient } />
+                        </>
+                    )
                 }
                 {
                     !isShowRecipt && basketItems.length && (
                         <>
+                            <div className="flex gap-8 mb-4">
+                                <div className="w-1/2">
+                                    <label className="block text-sm font-medium mb-2">شماره میز</label>
+                                    <TextInput
+                                        type="text"
+                                        value={ tableNumber === "0" ? "" : tableNumber || "" }
+                                        onChange={ handleChange }
+                                        className="text-right w-full border p-1 rounded"
+                                    />
+                                </div>
+                                <div className="w-1/2">
+                                    <label className="block text-sm font-medium mb-2">کد تخفیف</label>
+                                    <TextInput
+                                        value={ coupon === "0" ? "" : coupon || "" }
+                                        onChange={ handelCouponChange }
+                                        type="text"
+                                        className="text-right w-full border p-1 rounded"
+                                    />
+                                </div>
+                            </div>
                             <div>
                                 { basketItems.map(item => (
                                     <div
