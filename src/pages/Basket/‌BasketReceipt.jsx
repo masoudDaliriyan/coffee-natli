@@ -40,7 +40,7 @@ const BasketReceipt = ({ recipientData }) =>
 
     };
 
-    const { name, items: recipientItems = [] } = recipientData;
+    const { items: recipientItems = [] } = recipientData;
 
 
     return (

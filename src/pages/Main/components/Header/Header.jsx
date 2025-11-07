@@ -1,24 +1,25 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../../../../components/Button/Button.jsx";
-import {useAuth} from "../../../../context/AuthContext.jsx";
-import LogoIcon from '/public/icons/logo.jpg'
-import LoginIcon from '/public/icons/Login.svg'
-import HeaderImg from '/public/icons/cover.jpg'
-import {RootLink} from "../../../../components/RootLink/RootLink.jsx";
+import { useAuth } from "../../../../context/AuthContext.jsx";
+import LogoIcon from '/public/icons/logo.jpg';
+import LoginIcon from '/public/icons/Login.svg';
+import HeaderImg from '/public/icons/cover.jpg';
+import { RootLink } from "../../../../components/RootLink/RootLink.jsx";
 
-export default function Header() {
-    const {isAuthenticated, logout} = useAuth();
+export default function Header()
+{
+    const { isAuthenticated, logout } = useAuth();
     return (
         <>
-            <div className="relative">
+            <div className="relative pb-22">
                 <div className="py-6 flex justify-center  bg-cover bg-center h-[300px]"
-                     style={{backgroundImage: `url(${HeaderImg})`}}>
+                    style={ { backgroundImage: `url(${ HeaderImg })` } }>
 
 
-                    {isAuthenticated ? (
+                    { isAuthenticated ? (
                         <div className="absolute top-[20px] left-[20px] flex gap-2">
-                            <Button onClick={logout}>
+                            <Button onClick={ logout }>
                                 خروج
                             </Button>
                             <RootLink to="/orders">
@@ -29,7 +30,7 @@ export default function Header() {
                         <div className="absolute top-[20px] left-[20px] flex gap-2">
                             <RootLink to="/login">
                                 <Button>
-                                    <img src={LoginIcon} alt="Login"/>
+                                    <img src={ LoginIcon } alt="Login" />
                                     ورود
                                 </Button>
                             </RootLink>
@@ -37,13 +38,23 @@ export default function Header() {
                                 <Button>ثبت نام</Button>
                             </RootLink>
                         </div>
-                    )}
-                    <img className="w-[180px] mt-[180px]" src={LogoIcon} alt="Logo"/>
+                    ) }
+                    <img className="w-[180px] mt-[180px]" src={ LogoIcon } alt="Logo" />
+
+                    <RootLink to="/info">
+                        <Button
+                            className="absolute bottom-10 left-5"
+                        >
+                            اطلاعات مجموعه
+                        </Button>
+                    </RootLink>
                 </div>
             </div>
-            <div className="mt-5 mb-5 text-center text-lg font-semibold">
+            <div className=" mb-5 text-center text-lg font-semibold">
                 کافه قنادی وانیلا (اقدسیه)
+
             </div>
+
         </>
     );
 }

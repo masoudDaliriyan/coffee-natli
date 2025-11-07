@@ -73,10 +73,7 @@ function App()
 
     useEffect(() =>
     {
-        if (branches.includes(unique_name))
-        {
-            navigate(`/${ unique_name }/${ DEFAULT_TABLE }/`, { replace: true });
-        } else
+        if (!branches.includes(unique_name))
         {
             navigate("/404", { replace: true });
         }
