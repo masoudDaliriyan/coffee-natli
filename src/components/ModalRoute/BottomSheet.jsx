@@ -1,12 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
-import  closeIcon from '../../../public/icons/close.svg'
+import React, { useEffect, useState } from "react";
+import closeIcon from '../../../public/icons/close.svg';
 
-const BottomSheet = ({ initialOpen, onClose, children }) => {
+const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
     const [visible, setVisible] = useState(false);
     const [open, setOpen] = useState(initialOpen);
 
-
-    // Lock scroll and trigger animation on open
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "";
         if (open) {
@@ -16,37 +14,53 @@ const BottomSheet = ({ initialOpen, onClose, children }) => {
         }
     }, [open]);
 
-    const onCloseBottomSheet = ()=> {
-        setOpen(false)
-        setVisible(false)
-        onClose()
-    }
+    const onCloseBottomSheet = () => {
+        setOpen(false);
+        setVisible(false);
+        onClose();
+    };
 
     useEffect(() => {
-        setOpen(initialOpen)
-        setOpen(true)
+        setOpen(initialOpen);
+        setOpen(true);
     }, []);
 
     if (!open) return null;
+
     return (
         <div
-            className="fixed inset-0 z-50  justify-center bg-black/40 flex over ">
+            className="fixed inset-0 z-50 flex justify-center items-end bg-black/40"
+            onClick={onCloseBottomSheet}
+        >
             <div
-                className={`w-full overflow-y-auto max-w-md bg-white rounded-t-2xl shadow-lg transform transition-transform duration-300 ease-out mt-[10vh] will-change-transform
+                className={`w-full max-w-md bg-white rounded-t-2xl shadow-lg transform transition-transform duration-300 ease-out
                 ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
-                onClick={(e) => e.stopPropagation()} >
-                <div className="h-1 w-12 bg-gray-300 rounded-full mx-auto my-4">
-
+                onClick={(e) => e.stopPropagation()}
+                style={{ height: '80vh', display: 'flex', flexDirection: 'column' }}
+            >
+                {/* Header */}
+                <div className="header flex-shrink-0 p-4 border-b border-gray-300">
+                    <div className="flex justify-between items-center">
+                        <button
+                            onClick={onCloseBottomSheet}
+                            className="hover:bg-gray-100 rounded p-2"
+                        >
+                            <img src={closeIcon} className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div>
+                        {header}
+                    </div>
                 </div>
-                <div className="w-full absolute top-3">
-                    <button
-                        onClick={onCloseBottomSheet}
-                        className="hover:bg-gray-100 rounded transition-colors p-4"
-                        aria-label="بستن منو"
-                    >
-                        <img src={closeIcon} className="w-[30px]" />
-                    </button>
+
+                {/* Content */}
+                <div className="content flex-1 overflow-auto p-4 ">
                     {children}
+                </div>
+
+                {/* Footer */}
+                <div className="footer flex-shrink-0 p-4 border-t border-gray-300">
+                    {footer}
                 </div>
             </div>
         </div>
