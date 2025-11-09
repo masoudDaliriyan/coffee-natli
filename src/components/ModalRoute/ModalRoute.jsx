@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import BottomSheet from "./BottomSheet.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 export default function ModalRoute({ children, ...props }) {
-    const navigate = useNavigate();
+    const rootNavigate = useRootNavigate();
     const params = useParams();
 
     const handleClose = () => {
@@ -12,7 +13,7 @@ export default function ModalRoute({ children, ...props }) {
             basePath += `${params.table_number}/`;
         }
 
-        navigate(basePath);
+        rootNavigate(basePath);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 

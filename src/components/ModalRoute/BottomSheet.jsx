@@ -12,6 +12,11 @@ const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
         } else {
             setVisible(false);
         }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [open]);
 
     const onCloseBottomSheet = () => {

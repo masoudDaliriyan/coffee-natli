@@ -65,7 +65,7 @@ export default function Orders()
     if (loading) return <div className="px-4"><DefaultSkeleton /></div>;
 
     return (
-        <div className="p-4 max-w-5xl mx-auto">
+        <div className=" max-w-5xl mx-auto">
             { error && <Error message={ error } /> }
 
             <h1 className="text-2xl font-bold mb-6 text-gray-800">سفارشات من</h1>

@@ -1,10 +1,14 @@
 import TextInput from "../../components/Input/Input.jsx";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CaptchaIcon from '../../../public/icons/captcha.png'
 import {reCaptcha} from "../../services/api.js";
 
 export const Captcha = ({ base64,onChangeCode=()=>{} }) => {
     const [rCaptcha, setRCaptcha] = useState(0);
+
+    useEffect(() => {
+        setRCaptcha(base64)
+    }, [base64]);
 
     const retry = async () => {
         // Add retry logic here if needed

@@ -18,27 +18,7 @@ const BasketReceipt = ({ recipientData }) =>
         return Number(value).toLocaleString("fa-IR");
     }
 
-    const lastCheckout = async () =>
-    {
-        const items = changePayloadForBackend(basketItems);
-        const payload = {
-            tableNo: tableNumber,
-            coupon: coupon,
-            prods: items,
-            payType: 1
-        };
 
-        setLoading(true);
-        const res = await orderAdd(payload);
-        setLoading(false);
-
-        if (res.status !== 1) (
-            setError(res.message)
-        );
-
-        window.location.href = res.data.redirect;
-
-    };
 
     const { items: recipientItems = [] } = recipientData;
 
@@ -76,18 +56,7 @@ const BasketReceipt = ({ recipientData }) =>
                     </div>
                 )) }
             </div>
-            <Button
-                onClick={ lastCheckout }
-                disabled={ loading }
-                className="w-full py-4 flex justify-center gap-2 items-center"
-                variant="success"
-            >
-                { loading ? "در حال پردازش..." : (
-                    <>
-                        <span>پرداخت</span>
-                    </>
-                ) }
-            </Button>
+
         </>
     );
 };
