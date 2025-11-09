@@ -39,19 +39,23 @@ const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
                 style={{ height: '80vh', display: 'flex', flexDirection: 'column' }}
             >
                 {/* Header */}
-                <div className="header flex-shrink-0 p-4 border-b border-gray-300">
-                    <div className="flex justify-between items-center">
-                        <button
-                            onClick={onCloseBottomSheet}
-                            className="hover:bg-gray-100 rounded p-2"
-                        >
-                            <img src={closeIcon} className="w-6 h-6" />
-                        </button>
+                    <div className="header flex-shrink-0 p-4 border-b border-gray-300">
+                        <div className="flex justify-between items-center">
+                            <button
+                                onClick={onCloseBottomSheet}
+                                className="hover:bg-gray-100 rounded p-2"
+                            >
+                                <img src={closeIcon} className="w-6 h-6" />
+                            </button>
+                        </div>
+                        {header && (
+                            <div>
+                                {header}
+                            </div>
+                        )}
+
+
                     </div>
-                    <div>
-                        {header}
-                    </div>
-                </div>
 
                 {/* Content */}
                 <div className="content flex-1 overflow-auto p-4 ">
@@ -59,9 +63,12 @@ const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="footer flex-shrink-0 p-4 border-t border-gray-300">
-                    {footer}
-                </div>
+                {footer && (
+                    <div className="footer flex-shrink-0 p-4 border-t border-gray-300">
+                        {footer}
+                    </div>
+                )}
+
             </div>
         </div>
     );

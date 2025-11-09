@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     const login = useCallback(async ({ mobile, password, captcha = "" }) => {
         setLoading(true);
             const res = await apiLogin({ mobile, password, captcha });
-            console.log(res)
 
             if (res?.data?.token) {
                 setToken(res.data.token);
@@ -36,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
             setLoading(false);
 
-            return { success: res.status!==0, message: res.message || "خطا در ورود" };
+            return { success: res.status!==0, message: res.message || "خطا در ورود" ,data:res.data};
     }, []);
 
 

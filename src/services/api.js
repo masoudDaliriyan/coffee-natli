@@ -80,6 +80,13 @@ export const resetPassword = async (payload) =>
     return handleResponse(res);
 };
 
+
+export const reCaptcha = async (payload) =>
+{
+    const res = await api.post(`/reCaptcha/${ BRANCH }`);
+    return handleResponse(res);
+};
+
 export const login = async (payload) =>
 {
     const res = await api.post(`/login/${ BRANCH }`, payload);

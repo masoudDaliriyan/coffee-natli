@@ -92,7 +92,7 @@ function App()
                 <Route path="otp/:mobile" element={ <ModalRoute><OTP /></ModalRoute> } />
                 <Route path="login" element={ <ModalRoute><Login /></ModalRoute> } />
                 <Route path="/basket" element={ <Basket /> } />
-                <Route path="search" element={ <ModalRoute><SearchableProductList /></ModalRoute> } />
+                <Route path="search" element={ <SearchableProductList />} />
                 <Route path="info" element={ <ModalRoute><StoreInfo /></ModalRoute> } />
                 <Route path="reset" element={ <ModalRoute><Rest /></ModalRoute> } />
             </Routes>

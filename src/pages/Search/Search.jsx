@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { useProducts } from "../../context/ProductContext.jsx";
 import ProductList from "../Products/components/ProductList.jsx";
+import ModalRoute from "../../components/ModalRoute/ModalRoute.jsx";
+import Button from "../../components/Button/Button.jsx";
+import {rootNavigate} from "../../services/api.js";
+import {RootLink} from "../../components/RootLink/RootLink.jsx";
 
 export default function SearchProducts() {
     const { products, loading } = useProducts();
@@ -34,20 +38,22 @@ export default function SearchProducts() {
 
     if (!products) return <div>موردی یافت نشد</div>;
 
+    const header = (
+        <div className="mb-4 flex justify-center">
+            <input
+                type="text"
+                placeholder="جستجو محصولات..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full border rounded p-2 focus:outline-none focus:ring mx-4"
+            />
+        </div>
+    )
+
 
     return (
-        <div>
-            <div className="mb-4 flex justify-center">
-                <input
-                    type="text"
-                    placeholder="جستجو محصولات..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full border rounded p-2 focus:outline-none focus:ring mx-4"
-                />
-            </div>
-
+        <ModalRoute header={header} >
              <ProductList products={filteredProducts}/>
-        </div>
+        </ModalRoute>
     );
 }
