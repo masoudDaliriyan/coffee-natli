@@ -12,6 +12,7 @@ const BasketReceipt = ({ recipientData }) =>
     const { items: basketItems, coupon, tableNumber } = useBasket();
     const [error, setError] = useState("");
 
+
     function formatPrice(value)
     {
         if (value == null || value === "") return "";

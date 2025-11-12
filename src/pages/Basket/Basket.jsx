@@ -25,6 +25,12 @@ export default function Basket() {
     const [recipient, setRecipient] = useState(null);
     const [isShowRecipt, setIsShowRecipt] = useState(false);
     const params = useParams();
+    const [payType, setPayType] = useState("1"); // initial empty value
+
+    const onChangePayType = (e)=>{
+        setPayType(e.target.value)
+    }
+
 
     useEffect(() => {
         if (params.tableNumber) {
@@ -160,18 +166,36 @@ export default function Basket() {
     };
 
     const recipientFooter = (
-        <Button
-            onClick={ lastCheckout }
-            disabled={ loading }
-            className="w-full py-4 flex justify-center gap-2 items-center"
-            variant="success"
-        >
-            { loading ? "در حال پردازش..." : (
-                <>
-                    <span>پرداخت</span>
-                </>
-            ) }
-        </Button>
+        <>
+            <div className="pb-4 flex space-x-4">
+                <label className="flex items-center space-x-2">
+                    <input type="radio" name="payment" checked={payType === "1"}  value="1" onChange={onChangePayType} />
+                    <span>انلاین</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                    <input type="radio" name="payment" checked={payType === "2"} value="2" onChange={onChangePayType} />
+                    <span>صندوق دار</span>
+                </label>
+            </div>
+            <Button
+                onClick={ lastCheckout }
+                disabled={ loading }
+                className="w-full py-4 flex justify-center gap-2 items-center"
+                variant="success"
+            >
+                { loading ? "در حال پردازش..." : (
+                    <>
+                        <span>
+                            پرداخت
+                            &nbsp;
+                            {recipient?.sum?.toLocaleString("fa-IR")}
+                            &nbsp;
+                            ریال
+                        </span>
+                    </>
+                ) }
+            </Button>
+        </>
     )
 
     const footer = (
@@ -199,7 +223,6 @@ export default function Basket() {
                     basketItems.length === 0 && (
                         <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
                     )
-
                 }
                 {
                     isShowRecipt && (

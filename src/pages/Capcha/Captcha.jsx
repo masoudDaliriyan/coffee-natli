@@ -16,7 +16,6 @@ export const Captcha = ({ base64,onChangeCode=()=>{} }) => {
 
         setRCaptcha(rs.data.captchaBase64)
 
-        console.log(rs)
     };
 
     if (!base64) {

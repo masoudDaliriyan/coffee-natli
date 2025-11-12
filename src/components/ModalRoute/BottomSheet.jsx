@@ -13,7 +13,6 @@ const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
             setVisible(false);
         }
 
-        // Cleanup on unmount
         return () => {
             document.body.style.overflow = "";
         };

@@ -4,6 +4,7 @@ import Button from "../../components/Button/Button.jsx";
 import { resetPassword } from "../../services/api.js";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
 import Error from '../../components/Error/Error.jsx'
+import {Captcha} from "../Capcha/Captcha.jsx";
 
 const ResetPassword = () => {
     const rootNavigate = useRootNavigate();
@@ -13,6 +14,7 @@ const ResetPassword = () => {
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [base64,setBase64]  = useState("")
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,11 +29,15 @@ const ResetPassword = () => {
         setLoading(true);
         try {
             const res = await resetPassword({ mobile, captcha });
+            console.log(res)
 
             if (res.success) {
                 setMessage("درخواست بازیابی رمز عبور با موفقیت ارسال شد.");
                 rootNavigate("/login");
             } else {
+                if(res.data.captchaBase64){
+                    setBase64(res.data.captchaBase64)
+                }
                 setError(res.message || "ارسال درخواست ناموفق بود.");
             }
         } catch (err) {
@@ -64,6 +70,7 @@ const ResetPassword = () => {
                         placeholder="مثلاً 09121112233"
                         className="text-right w-full"
                     />
+                    <Captcha onChangeCode={setCaptcha} base64={base64}></Captcha>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "در حال ارسال..." : "بازیابی رمزعبور"}

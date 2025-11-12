@@ -5,6 +5,7 @@ import Input from "../../components/Input/Input.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
 import Error from '../../../src/components/Error/Error.jsx'
+import {Captcha} from "../Capcha/Captcha.jsx";
 
 export default function OTP() {
     const { mobile: routeMobile } = useParams();
@@ -16,6 +17,8 @@ export default function OTP() {
     const [otp, setOtp] = useState(Array(5).fill(""));
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [captcha,setCaptcha] =useState("")
+    const [base64,setBase64] = useState()
 
     const [from] = useState(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -50,10 +53,21 @@ export default function OTP() {
         setError("");
 
         try {
-            const verifyRes = await verifyOtp({ mobile, verify: code });
+            const payload = {
+               mobile,
+               captcha,
+               verify:code
+            }
+            console.log(payload)
+            const verifyRes = await verifyOtp(payload);
+
+            console.log(captcha)
             console.log(verifyRes)
 
             if (verifyRes.status !== 1) {
+                if(verifyRes.data.captchaBase64){
+                    setBase64(verifyRes.data.captchaBase64)
+                }
                 setError(verifyRes.message);
                 return;
             }
@@ -62,7 +76,6 @@ export default function OTP() {
             if (token) {
                 setToken(token);
                 localStorage.setItem("jwt", token);
-
             }
 
             rooNavigate(from || '/');
@@ -105,7 +118,9 @@ export default function OTP() {
                     />
                 ))}
             </div>
-
+            <div className="mb-6">
+                <Captcha  base64={base64} onChangeCode={setCaptcha}></Captcha>
+            </div>
             <Button
                 onClick={handleSubmit}
                 disabled={otp.join("").length !== otp.length || isLoading}

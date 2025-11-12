@@ -59,10 +59,10 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const verifyOtp = useCallback(async ({ mobile, verify }) => {
+    const verifyOtp = useCallback(async (payload) => {
         setLoading(true);
         try {
-            const data = await apiVerifyOtp({ mobile, verify });
+            const data = await apiVerifyOtp(payload);
             setLoading(false);
             return data; // {status:1,...} as API returns
         } catch (err) {

@@ -6,10 +6,14 @@ import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 import PersianDateInput from "../../components/PersianDataInput/PersianDateInput.jsx";
 import {useRootNavigate} from "../../utils/RootNavigate.js";
 import Error from '../../components/Error/Error.jsx'
+import { Captcha } from "../Capcha/Captcha.jsx";
+
 
 const Signup = () => {
     const { register, loading } = useAuth();
     const rootNavigate = useRootNavigate();
+    const [captcha, setCaptcha] = useState("");
+    const [captchaBase64, setCaptchaBase64] = useState("");
 
 
     const [form, setForm] = useState({
@@ -42,11 +46,15 @@ const Signup = () => {
         setError("");
         setSuccess("");
 
-        const res = await register(form);
+        const res = await register({ ...form, captcha });
+
         if (res.data.status) {
             setSuccess("ثبت نام با موفقیت انجام شد. لطفاً برای ورود تأیید کنید.");
             setTimeout(() => rootNavigate(`/otp/${form.mobile}?from=${from}`), 1500);
         } else {
+            if(res.data.data.captchaBase64){
+                setCaptchaBase64(res.data.data.captchaBase64)
+            }
             setError(res.data.message || "ثبت نام ناموفق بود.");
         }
     };
@@ -57,6 +65,7 @@ const Signup = () => {
             className="bg-white p-6 rounded-2xl w-full space-y-4"
         >
             <h2 className="text-2xl font-bold text-center mb-4">ثبت نام</h2>
+
 
             <TextInput
                 name="mobile"
@@ -113,14 +122,13 @@ const Signup = () => {
                 value={form.nCode}
                 onChange={handleChange}
             />
-
+            <Captcha base64={captchaBase64} onChangeCode={setCaptcha} />
             {
                error && (
                    <Error message={error}/>
                 )
             }
             {success && <p className="text-green-600 text-sm">{success}</p>}
-
             <Button
                 type="submit"
                 className="w-full justify-center"
