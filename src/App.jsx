@@ -50,7 +50,6 @@ function App()
 
     const location = useLocation();
 
-    const state = location.state && location.state.background;
 
     useEffect(() =>
     {
@@ -85,20 +84,14 @@ function App()
             <Products />
             <Routes>
                 <Route path="orders" element={ <ModalRoute><Orders /></ModalRoute> } />
-                <Route path="signup" element={ <ModalRoute><Signup /></ModalRoute> } />
+                <Route path="signup" element={ <Signup />} />
                 <Route path="otp/:mobile" element={ <ModalRoute><OTP /></ModalRoute> } />
-                <Route path="login" element={ <ModalRoute><Login /></ModalRoute> } />
+                <Route path="login" element={ <Login /> } />
                 <Route path="/basket" element={ <Basket /> } />
                 <Route path="search" element={ <SearchableProductList />} />
                 <Route path="info" element={ <ModalRoute><StoreInfo /></ModalRoute> } />
                 <Route path="reset" element={ <ModalRoute><Rest /></ModalRoute> } />
             </Routes>
-            { state && (
-                <Routes>
-                    <Route path="/signup" element={ <ModalRoute><Signup /></ModalRoute> } />
-                    <Route path="/otp" element={ <ModalRoute><OTP /></ModalRoute> } />
-                </Routes>
-            ) }
         </>
     );
 }

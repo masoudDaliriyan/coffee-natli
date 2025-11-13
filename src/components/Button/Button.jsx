@@ -16,7 +16,7 @@ const Button = ({
     } else if (variant === "secondary") {
         variantStyles = "bg-gray-900 border-gray-500 text-white";
     } else if (variant === "success") {
-        variantStyles = "bg-green-600 border-green-800 text-white";
+        variantStyles = "bg-green-700 border-green-800 text-white";
     }
 
 

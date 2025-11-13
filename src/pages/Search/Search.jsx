@@ -3,12 +3,16 @@ import { useProducts } from "../../context/ProductContext.jsx";
 import ProductList from "../Products/components/ProductList.jsx";
 import ModalRoute from "../../components/ModalRoute/ModalRoute.jsx";
 import Button from "../../components/Button/Button.jsx";
-import {rootNavigate} from "../../services/api.js";
-import {RootLink} from "../../components/RootLink/RootLink.jsx";
+import {useRootNavigate} from "../../utils/RootNavigate.js";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 export default function SearchProducts() {
     const { products, loading } = useProducts();
     const [searchTerm, setSearchTerm] = useState("");
+    const rootNavigate = useRootNavigate();
+    const { isAuthenticated } = useAuth();
+
+
 
     const filteredProducts = useMemo(() => {
         if (!products) return { prods: [], cats: [] };
@@ -50,9 +54,34 @@ export default function SearchProducts() {
         </div>
     )
 
+    const handelOnclickBasket = () =>
+    {
+        if (isAuthenticated)
+        {
+            rootNavigate("basket");
+        } else
+        {
+            rootNavigate("login?from=/basket");
+        }
+    };
+
+    const footer = (
+            <Button
+                onClick={handelOnclickBasket}
+                disabled={loading}
+                className="w-full py-3 flex justify-center gap-2 items-center"
+                variant="success"
+            >
+                {loading ? "در حال پردازش..." : (
+                    <>
+                        <span>سبد خرید</span>
+                    </>
+                )}
+            </Button>
+        )
 
     return (
-        <ModalRoute header={header} >
+        <ModalRoute header={header} footer={footer} >
              <ProductList products={filteredProducts}/>
         </ModalRoute>
     );

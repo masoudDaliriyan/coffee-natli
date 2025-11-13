@@ -1,16 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {useBasket} from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
 import {orderAdd, orderCheck} from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
 import Error from '../../components/Error/Error.jsx';
-import SelectInput from "../../components/SelectInput/SelectInput.jsx";
 import BasketReceipt from "./‌BasketReceipt.jsx";
 import {changePayloadForBackend} from "./basketUtils.js";
 import ModalRoute from "../../components/ModalRoute/ModalRoute.jsx";
-import {RootLink} from "../../components/RootLink/RootLink.jsx";
 
 export default function Basket() {
     const {
@@ -85,25 +83,6 @@ export default function Basket() {
 
             setRecipient(checkOrderRes.data);
             setIsShowRecipt(true);
-
-            // const addRes = await orderAdd({
-            //     ...payload,
-            //     payType: 1,
-            // });
-
-            // orderCheck;
-            // console.log(addRes);
-
-
-            // if (addRes.message && addRes.status === 0)
-            // {
-            // setError(addRes.message);
-            // }
-            // if (addRes.data?.redirect)
-            // {
-            // window.location.href = addRes.data.redirect
-            // }
-
         } catch (err) {
             setError(err.message || "خطا در ثبت سفارش");
         } finally {
@@ -120,7 +99,7 @@ export default function Basket() {
     )
     const header = (
         <>
-            <h1 className="text-2xl font-bold mb-4">سبد خرید</h1>
+            <h1 className="text-2xl font-bold mb-4 text-center">سبد خرید</h1>
             <div className="flex gap-8 mb-4">
                 <div className="w-1/2">
                     <label className="block text-sm font-medium mb-2">شماره میز</label>

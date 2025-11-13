@@ -23,7 +23,7 @@ export default function ProductList({ products, activeItem }) {
 
 
     return (
-        <>
+        <div style={{maxWidth:'500px',margin:'0 auto'}}>
             {products.cats.map((cat) => (
                 <div
                     key={cat.cat_id}
@@ -40,6 +40,6 @@ export default function ProductList({ products, activeItem }) {
                     </div>
                 </div>
             ))}
-        </>
+        </div>
     );
 }
