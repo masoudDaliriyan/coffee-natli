@@ -4,16 +4,9 @@ import {useRootNavigate} from "../../utils/RootNavigate.js";
 
 export default function ModalRoute({ children, ...props }) {
     const rootNavigate = useRootNavigate();
-    const params = useParams();
 
     const handleClose = () => {
-        let basePath = `/${params.unique_name}/`;
-
-        if (params.table_number) {
-            basePath += `${params.table_number}/`;
-        }
-
-        rootNavigate(basePath);
+        rootNavigate("");
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 

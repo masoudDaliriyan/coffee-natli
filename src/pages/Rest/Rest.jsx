@@ -27,24 +27,19 @@ const ResetPassword = () => {
         }
 
         setLoading(true);
-        try {
-            const res = await resetPassword({ mobile, captcha });
-            console.log(res)
+        const res = await resetPassword({ mobile, captcha });
+        console.log(res)
 
-            if (res.success) {
-                setMessage("درخواست بازیابی رمز عبور با موفقیت ارسال شد.");
-                rootNavigate("/login");
-            } else {
-                if(res.data.captchaBase64){
-                    setBase64(res.data.captchaBase64)
-                }
-                setError(res.message || "ارسال درخواست ناموفق بود.");
+        if (res.success) {
+            setMessage("درخواست بازیابی رمز عبور با موفقیت ارسال شد.");
+            rootNavigate("/login");
+        } else {
+            if(res.data.captchaBase64){
+                setBase64(res.data.captchaBase64)
             }
-        } catch (err) {
-            setError("خطایی در ارتباط با سرور رخ داد.");
-        } finally {
-            setLoading(false);
+            setError(res.message || "ارسال درخواست ناموفق بود.");
         }
+        setLoading(false);
     };
 
     return (

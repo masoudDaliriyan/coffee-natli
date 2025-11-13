@@ -55,19 +55,16 @@ function App()
     useEffect(() =>
     {
 
-        // const tableNumberValue = Number(tableNumber);
-        // const isTableNumberMissing = !tableNumber || isNaN(tableNumberValue);
-        // const hasRouteInsteadOfTableNumber = typeof tableNumber === "string" && !tableNumberValue;
-        //
-        // if (isTableNumberMissing)
-        // {
-        //     navigate(`/${ unique_name }/${ DEFAULT_TABLE }/`, { replace: true });
-        // }
-        //
-        // if (hasRouteInsteadOfTableNumber)
-        // {
-        //     navigate(`/${ unique_name }/${ DEFAULT_TABLE }/${ tableNumber }`, { replace: true });
-        // }
+        const tableNumberValue = Number(tableNumber);
+
+        if(isNaN(tableNumberValue)){
+            if(tableNumber==='orders'){
+                navigate(`/${ unique_name }/${ DEFAULT_TABLE }/orders`, { replace: true });
+            }else {
+                navigate(`/${ unique_name }/${ DEFAULT_TABLE }/`, { replace: true });
+            }
+
+        }
 
     }, []);
 
