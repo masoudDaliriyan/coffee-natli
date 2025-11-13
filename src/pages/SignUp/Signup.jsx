@@ -109,12 +109,14 @@ const Signup = () => {
                 <option value="1">زن</option>
             </SelectInput>
 
-            <PersianDateInput
-                name="birthDate"
-                value={form.birthDate}
-                onChange={handleChange}
-            />
-
+            <div>
+                <label className="block text-sm font-medium mb-1">تاریخ تولد</label>
+                <PersianDateInput
+                    name="birthDate"
+                    value={form.birthDate}
+                    onChange={handleChange}
+                />
+            </div>
             <TextInput
                 name="nCode"
                 type="text"

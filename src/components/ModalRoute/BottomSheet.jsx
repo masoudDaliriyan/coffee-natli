@@ -40,7 +40,7 @@ const BottomSheet = ({ initialOpen, onClose, children , header, footer }) => {
                 className={`w-full max-w-md bg-white rounded-t-2xl shadow-lg transform transition-transform duration-300 ease-out
                 ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
                 onClick={(e) => e.stopPropagation()}
-                style={{ height: '80vh', display: 'flex', flexDirection: 'column' }}
+                style={{ height: '90vh', display: 'flex', flexDirection: 'column' }}
             >
                 {/* Header */}
                     <div className="header flex-shrink-0 p-4 border-b border-gray-300">
