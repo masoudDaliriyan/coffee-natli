@@ -83,7 +83,7 @@ function App()
             />
             <Products />
             <Routes>
-                <Route path="orders" element={ <ModalRoute><Orders /></ModalRoute> } />
+                <Route path="orders" element={ <Orders />} />
                 <Route path="signup" element={ <Signup />} />
                 <Route path="otp/:mobile" element={ <ModalRoute><OTP /></ModalRoute> } />
                 <Route path="login" element={ <Login /> } />
