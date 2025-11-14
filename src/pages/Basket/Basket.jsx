@@ -80,6 +80,7 @@ export default function Basket() {
 
             if (checkOrderRes.status === 0) {
                 setBasketError(checkOrderRes.message);
+                setLoading(false)
                 return
             }
 
@@ -142,6 +143,7 @@ export default function Basket() {
 
         if (res.status !== 1) {
             setRecipientError(res.message);
+            setLoading(false)
             return;
         }
 
