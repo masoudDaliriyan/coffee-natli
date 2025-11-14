@@ -15,8 +15,6 @@ export default function Header()
             <div className="relative pb-22">
                 <div className="py-6 flex justify-center  bg-cover bg-center h-[300px]"
                     style={ { backgroundImage: `url(${ HeaderImg })` } }>
-
-
                     { isAuthenticated ? (
                         <div className="absolute top-[20px] left-[20px] flex gap-2">
                             <Button onClick={ logout }>
@@ -40,7 +38,6 @@ export default function Header()
                         </div>
                     ) }
                     <img className="w-[180px] mt-[180px]" src={ LogoIcon } alt="Logo" />
-
                     <RootLink to="/info">
                         <Button
                             className="absolute bottom-10 left-5"
@@ -52,9 +49,7 @@ export default function Header()
             </div>
             <div className=" mb-5 text-center text-lg font-semibold">
                 کافه قنادی وانیلا (اقدسیه)
-
             </div>
-
         </>
     );
 }

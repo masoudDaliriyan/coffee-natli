@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useBasket} from "../../context/BasketContex.jsx";
-import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
 import {orderAdd, orderCheck} from "../../services/api.js";
 import TextInput from "../../components/Input/Input.jsx";
@@ -9,21 +8,25 @@ import Error from '../../components/Error/Error.jsx';
 import BasketReceipt from "./‌BasketReceipt.jsx";
 import {changePayloadForBackend} from "./basketUtils.js";
 import ModalRoute from "../../components/ModalRoute/ModalRoute.jsx";
+import {RootLink} from "../../components/RootLink/RootLink.jsx";
+import SuccessMessage from "../../components/SuccessMessage/SuccessMessage.jsx";
+import Product from "../Products/components/Product.jsx";
 
 export default function Basket() {
     const {
         items: basketItems,
-        updateQuantity,
-        removeItem,
         tableNumber,
         setTableNumber,
         coupon,
-        setCoupon
+        setCoupon,
+        clearBasket
     } = useBasket();
     const [recipient, setRecipient] = useState(null);
     const [isShowRecipt, setIsShowRecipt] = useState(false);
+    const [isShowCashierPay, setIsShowCashierPay] = useState(false)
     const params = useParams();
     const [payType, setPayType] = useState("");
+    const [orderId, setOrderId] = useState(null)
 
     const onChangePayType = (e) => {
         setPayType(e.target.value)
@@ -75,12 +78,11 @@ export default function Basket() {
                 payType: payType,
             });
 
-            if (checkOrderRes.status == 0) {
+            if (checkOrderRes.status === 0) {
                 setBasketError(checkOrderRes.message);
                 return
             }
 
-            console.log(checkOrderRes.data);
 
             setRecipient(checkOrderRes.data);
             setIsShowRecipt(true);
@@ -101,27 +103,57 @@ export default function Basket() {
     const header = (
         <h1 className="text-2xl font-bold text-center">سبد خرید</h1>
     )
+
+    const cashierHeader = (
+        <h1 className="text-2xl font-bold text-center">پرداخت کیوسک شعبه</h1>
+    )
+
+    const cashier = (
+        <div className="text-2xl font-bold my-4">
+            <SuccessMessage message={"سفارش شما ثبت شد. می توانید از کیوسک مستقر در شعبه، صورتحساب خود را پرداخت نمایید."}></SuccessMessage>
+            <div className="text-center">
+                شماره سفارش:  {orderId}
+            </div>
+        </div>
+    )
+
+    const cashierFooter = (
+        <RootLink to="/orders">
+            <Button
+                className="w-full py-4 flex justify-center gap-2 items-center"
+                variant="success"
+            >
+                لیست سفارشات
+            </Button>
+        </RootLink>
+    )
+
     const lastCheckout = async () => {
         const items = changePayloadForBackend(basketItems);
         const payload = {
             tableNo: tableNumber,
             coupon: coupon,
             prods: items,
-            payType:payType
+            payType: payType
         };
 
         setLoading(true);
         const res = await orderAdd(payload);
-        setLoading(false);
 
         if (res.status !== 1) {
             setRecipientError(res.message);
             return;
         }
 
+        if (res.data.order_id) {
+            setIsShowRecipt(false)
+            setIsShowCashierPay(true)
+            setOrderId(res.data.order_id)
+            clearBasket()
+            return
+        }
+
         window.location.href = res.data.redirect;
-
-
     };
 
     const recipientFooter = (
@@ -135,11 +167,13 @@ export default function Basket() {
                 </div>
                 <div>
                     <label className="flex items-center space-x-2">
-                        <input type="radio" name="payment" checked={payType === "1"} value="1" onChange={onChangePayType}/>
+                        <input type="radio" name="payment" checked={payType === "1"} value="1"
+                               onChange={onChangePayType}/>
                         <span> آنلاین</span>
                     </label>
                     <label className="flex items-center space-x-2">
-                        <input type="radio" name="payment" checked={payType === "2"} value="2" onChange={onChangePayType}/>
+                        <input type="radio" name="payment" checked={payType === "2"} value="2"
+                               onChange={onChangePayType}/>
                         <span> کارتخوان کیوسک شعبه</span>
                     </label>
                 </div>
@@ -170,112 +204,74 @@ export default function Basket() {
             {basketError && (
                 <Error message={basketError}/>
             )}
-            <div className="flex gap-8 mb-4">
-                <div className="w-1/2">
-                    <label className="block text-sm font-medium mb-2">شماره میز</label>
-                    <TextInput
-                        type="text"
-                        value={tableNumber === "0" ? "" : tableNumber || ""}
-                        onChange={handleChange}
-                        className="text-right w-full border p-1 rounded"
-                    />
-                </div>
-                <div className="w-1/2">
-                    <label className="block text-sm font-medium mb-2">کد تخفیف</label>
-                    <TextInput
-                        value={coupon === "0" ? "" : coupon || ""}
-                        onChange={handelCouponChange}
-                        type="text"
-                        className="text-right w-full border p-1 rounded"
-                    />
-                </div>
-            </div>
-            <Button
-                onClick={handleCheckout}
-                disabled={loading}
-                className="w-full py-4 flex justify-center gap-2 items-center"
-                variant="success"
-            >
-                {loading ? "در حال پردازش..." : (
+            {
+                basketItems.length > 0 && (
                     <>
-                        <span>بررسی نهایی و پرداخت</span>
+                        <div className="flex gap-8 mb-4">
+                            <div className="w-1/2">
+                                <label className="block text-sm font-medium mb-2">شماره میز</label>
+                                <TextInput
+                                    type="text"
+                                    value={tableNumber === "0" ? "" : tableNumber || ""}
+                                    onChange={handleChange}
+                                    className="text-right w-full border p-1 rounded"
+                                />
+                            </div>
+                            <div className="w-1/2">
+                                <label className="block text-sm font-medium mb-2">کد تخفیف</label>
+                                <TextInput
+                                    value={coupon === "0" ? "" : coupon || ""}
+                                    onChange={handelCouponChange}
+                                    type="text"
+                                    className="text-right w-full border p-1 rounded"
+                                />
+                            </div>
+                        </div>
+                        <Button
+                            onClick={handleCheckout}
+                            disabled={loading}
+                            className="w-full py-4 flex justify-center gap-2 items-center"
+                            variant="success"
+                        >
+                            {loading ? "در حال پردازش..." : (
+                                <>
+                                    <span>بررسی نهایی و پرداخت</span>
+                                </>
+                            )}
+                        </Button>
                     </>
-                )}
-            </Button>
+                )
+            }
         </>
     )
 
     return (
         <>
-            <ModalRoute footer={isShowRecipt ? recipientFooter : footer}
-                        header={isShowRecipt ? recipientHeader : header}>
+            <ModalRoute footer={isShowRecipt ? recipientFooter : isShowCashierPay ? cashierFooter : footer}
+                        header={isShowRecipt ? recipientHeader : isShowCashierPay ? cashierHeader :header}>
 
                 <div className="mt-4"></div>
                 {
-                    basketItems.length === 0 && (
-                        <p className="mt-2 text-gray-600">هیچ محصولی در سبد خرید نیست</p>
-                    )
-                }
-                {
                     isShowRecipt && (
-                        <>
-                            <BasketReceipt recipientData={recipient}/>
-                        </>
+                        <BasketReceipt recipientData={recipient}/>
                     )
                 }
                 {
-                    !isShowRecipt && basketItems.length && (
+                    isShowCashierPay && (
+                        cashier
+                    )
+                }
+                {
+                    !isShowRecipt && !isShowCashierPay && (
                         <>
+                            {
+                                basketItems.length < 1 && (
+                                    <p className="mt-2 text-gray-600 text-center">هیچ محصولی در سبد خرید نیست</p>
+                                )
+                            }
                             <div>
                                 {basketItems.map(item => (
-                                    <div
-                                        key={item.id}
-                                        className="flex flex-col gap-3 p-3 mb-3 border border-gray-200 rounded-lg bg-white shadow-sm"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <img
-                                                src={`https://www.natli.ir/upload/prod/md/${item.image}.jpg`}
-                                                alt={item.title}
-                                                className="w-28 h-28 object-cover rounded-lg flex-shrink-0"
-                                            />
-                                            <div className="flex flex-col flex-1 text-right">
-                                                <div className="text-base font-semibold mb-2">{item.title}</div>
-                                                <div className="text-gray-600 text-sm mt-1 mb-2">
-                                                    <span>
-                                                        {Number(item.price * item.quantity).toLocaleString("fa-IR")}
-                                                    </span>
-                                                    <span> تومان</span>
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Counter
-                                                        id={item.id}
-                                                        quantity={item.quantity}
-                                                        onChange={(id, newQty) => updateQuantity(id, newQty)}
-                                                    />
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="mt-2">
-                                            <div className="list-disc list-inside">
-                                                {item.extra.map(extra => (
-                                                    <div key={extra.id}>
-                                                        {extra.title} - {extra.price.toLocaleString("fa-IR")} تومان
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex justify-end">
-                                            <button
-                                                onClick={() => removeItem(item.id)}
-                                                className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600"
-                                            >
-                                                حذف
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <Product data={item}></Product>
                                 ))}
                             </div>
                         </>

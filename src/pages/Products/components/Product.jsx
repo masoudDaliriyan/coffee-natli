@@ -31,11 +31,12 @@ export default function Product({data}) {
     }
 
     const handleAddToBasket = () => {
+        console.log(data.extra)
         addItem({
             id: data.id,
             title: data.title,
             price: data.price,
-            image: data.thumbnail,
+            thumbnail: data.thumbnail,
             extra: [],
             quantity: 1
         });
@@ -118,26 +119,22 @@ export default function Product({data}) {
             {data?.extra?.length > 0 && isItemExist(data.id) && (
                 <div className="mt-3  pt-2">
                     <h4 className="font-medium mb-1 text-sm text-gray-700">انتخاب موارد اضافه:</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex  gap-2">
                         {data.extra.map((item) => (
                             <div
                                 key={item.id}
-                                className="flex-1 flex flex-col max-w-[50%] px-2 mb-2  items-center  justify-between border rounded p-2 hover:bg-gray-50 flex items-start flex-col gap-1"
+                                className="flex-1 flex flex-wrap flex-col max-w-[50%] px-2 mb-2  items-center  justify-between border rounded p-2 hover:bg-gray-50  items-start flex-col gap-1"
                             >
-                                <div>
-                                    <div className="flex items-center space-x-2">
-                                        <CheckboxInput
-                                            checked={isExtraSelected(data.id, item.id)}
-                                            onChange={() => handleExtraChange(data.id, item)}
-                                        />
-                                        <span className="text-sm">{item.title}</span>
-                                    </div>
+                                <div className="flex items-center space-x-2">
+                                    <CheckboxInput
+                                        checked={isExtraSelected(data.id, item.id)}
+                                        onChange={() => handleExtraChange(data.id, item)}
+                                    />
+                                    <span className="text-sm">{item.title}</span>
                                 </div>
                                 <div className="flex mt-2 gap-1">
-                                    <div className="mt-2">
-                                        <div>
-                                            {item.price.toLocaleString('fa-IR')}&nbsp;ریال
-                                        </div>
+                                    <div className="mt-2 text-[13px]">
+                                        {item.price.toLocaleString('fa-IR')}&nbsp;ریال
                                     </div>
                                     {
                                         isExtraSelected(data.id, item.id) && (

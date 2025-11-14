@@ -50,15 +50,17 @@ export default function Orders() {
         }
     };
 
-    if (loading) return <div className="px-4"><DefaultSkeleton/></div>;
 
     const header = (
-        <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">سفارشات من</h1>
+        <h1 className="text-2xl font-bold  text-gray-800 text-center">سفارشات من</h1>
     )
 
     return (
         <ModalRoute header={header}>
             <div className="max-w-5xl mx-auto">
+                {loading && (
+                    <DefaultSkeleton/>
+                )}
                 {error && <Error message={error}/>}
                 {orders.length === 0 ? (
                     <p className="text-gray-600 text-center mt-10">هیچ سفارشی ندارید</p>
@@ -76,7 +78,7 @@ export default function Orders() {
                                         className="flex justify-between items-center mb-4 pb-3 border-b border-gray-100 cursor-pointer">
                                         <div>
                                             <p className="font-semibold text-gray-800">
-                                                شماره سفارش: {order.orderNumber}
+                                                شماره سفارش: {order.id}
                                             </p>
                                             <p className="text-sm text-gray-500 mt-1">
                                                 تاریخ ثبت: {order.cDate}
@@ -86,8 +88,6 @@ export default function Orders() {
                                         {order.status_title}
                                     </span>
                                     </div>
-
-                                    {/* Toggle Accordion */}
                                     <div onClick={() => toggleOrder(order.id)}
                                          className="flex items-center gap-2 cursor-pointer mt-2">
                                         {isOpen ? (
@@ -97,8 +97,6 @@ export default function Orders() {
                                         )}
                                         <span className="text-gray-700 font-medium">جزئیات سفارش</span>
                                     </div>
-
-                                    {/* Items Accordion */}
                                     {isOpen && order.items && order.items.length > 0 && (
                                         <div className="space-y-3 mt-3">
                                             {order.items.map((item) => (
