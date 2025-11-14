@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useBasket} from "../../context/BasketContex.jsx";
 import Counter from "../../components/Counter/Counter.jsx";
 import Button from "../../components/Button/Button.jsx";
@@ -23,9 +23,9 @@ export default function Basket() {
     const [recipient, setRecipient] = useState(null);
     const [isShowRecipt, setIsShowRecipt] = useState(false);
     const params = useParams();
-    const [payType, setPayType] = useState("1"); // initial empty value
+    const [payType, setPayType] = useState("");
 
-    const onChangePayType = (e)=>{
+    const onChangePayType = (e) => {
         setPayType(e.target.value)
     }
 
@@ -53,14 +53,15 @@ export default function Basket() {
 
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [basketError, setBasketError] = useState("");
+    const [recipientError, setRecipientError] = useState("");
 
     const handleCheckout = async () => {
         if (!basketItems.length) return;
         const payloadItems = changePayloadForBackend(basketItems);
 
         setLoading(true);
-        setError("");
+        setBasketError("");
 
         try {
             const payload = {
@@ -71,11 +72,11 @@ export default function Basket() {
 
             const checkOrderRes = await orderCheck({
                 ...payload,
-                payType: 1,
+                payType: payType,
             });
 
             if (checkOrderRes.status == 0) {
-                setError(checkOrderRes.message);
+                setBasketError(checkOrderRes.message);
                 return
             }
 
@@ -84,22 +85,91 @@ export default function Basket() {
             setRecipient(checkOrderRes.data);
             setIsShowRecipt(true);
         } catch (err) {
-            setError(err.message || "خطا در ثبت سفارش");
+            setBasketError(err.message || "خطا در ثبت سفارش");
         } finally {
             setLoading(false);
         }
     };
     const recipientHeader = (
         <>
-            <h1 className="text-2xl font-bold mb-4">رسید خرید نهایی</h1>
-            <div className="flex gap-8 mb-4 justify-end">
-                <Button variant="secondary" onClick={()=>setIsShowRecipt(false)} >برگشت به سبد خرید</Button>
+            <h1 className="text-2xl font-bold mb-4 text-center">رسید خرید نهایی</h1>
+            <div className="flex gap-8 justify-end">
+                <Button variant="secondary" onClick={() => setIsShowRecipt(false)}>برگشت به سبد خرید</Button>
             </div>
         </>
     )
     const header = (
+        <h1 className="text-2xl font-bold text-center">سبد خرید</h1>
+    )
+    const lastCheckout = async () => {
+        const items = changePayloadForBackend(basketItems);
+        const payload = {
+            tableNo: tableNumber,
+            coupon: coupon,
+            prods: items,
+            payType:payType
+        };
+
+        setLoading(true);
+        const res = await orderAdd(payload);
+        setLoading(false);
+
+        if (res.status !== 1) {
+            setRecipientError(res.message);
+            return;
+        }
+
+        window.location.href = res.data.redirect;
+
+
+    };
+
+    const recipientFooter = (
         <>
-            <h1 className="text-2xl font-bold mb-4 text-center">سبد خرید</h1>
+            {recipientError && (
+                <Error message={recipientError}/>
+            )}
+            <div className="pb-4 flex space-x-4">
+                <div>
+                    روش پرداخت
+                </div>
+                <div>
+                    <label className="flex items-center space-x-2">
+                        <input type="radio" name="payment" checked={payType === "1"} value="1" onChange={onChangePayType}/>
+                        <span> آنلاین</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                        <input type="radio" name="payment" checked={payType === "2"} value="2" onChange={onChangePayType}/>
+                        <span> کارتخوان کیوسک شعبه</span>
+                    </label>
+                </div>
+            </div>
+            <Button
+                onClick={lastCheckout}
+                disabled={loading}
+                className="w-full py-4 flex justify-center gap-2 items-center"
+                variant="success"
+            >
+                {loading ? "در حال پردازش..." : (
+                    <>
+                        <span>
+                            پرداخت
+                            &nbsp;
+                            {recipient?.sum?.toLocaleString("fa-IR")}
+                            &nbsp;
+                            ریال
+                        </span>
+                    </>
+                )}
+            </Button>
+        </>
+    )
+
+    const footer = (
+        <>
+            {basketError && (
+                <Error message={basketError}/>
+            )}
             <div className="flex gap-8 mb-4">
                 <div className="w-1/2">
                     <label className="block text-sm font-medium mb-2">شماره میز</label>
@@ -120,83 +190,26 @@ export default function Basket() {
                     />
                 </div>
             </div>
-        </>
-    )
-    const lastCheckout = async () =>
-    {
-        const items = changePayloadForBackend(basketItems);
-        const payload = {
-            tableNo: tableNumber,
-            coupon: coupon,
-            prods: items,
-            payType: 1
-        };
-
-        setLoading(true);
-        const res = await orderAdd(payload);
-        setLoading(false);
-
-        if (res.status !== 1) (
-            setError(res.message)
-        );
-
-        window.location.href = res.data.redirect;
-
-    };
-
-    const recipientFooter = (
-        <>
-            <div className="pb-4 flex space-x-4">
-                <label className="flex items-center space-x-2">
-                    <input type="radio" name="payment" checked={payType === "1"}  value="1" onChange={onChangePayType} />
-                    <span>انلاین</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                    <input type="radio" name="payment" checked={payType === "2"} value="2" onChange={onChangePayType} />
-                    <span>صندوق دار</span>
-                </label>
-            </div>
             <Button
-                onClick={ lastCheckout }
-                disabled={ loading }
+                onClick={handleCheckout}
+                disabled={loading}
                 className="w-full py-4 flex justify-center gap-2 items-center"
                 variant="success"
             >
-                { loading ? "در حال پردازش..." : (
+                {loading ? "در حال پردازش..." : (
                     <>
-                        <span>
-                            پرداخت
-                            &nbsp;
-                            {recipient?.sum?.toLocaleString("fa-IR")}
-                            &nbsp;
-                            ریال
-                        </span>
+                        <span>بررسی نهایی و پرداخت</span>
                     </>
-                ) }
+                )}
             </Button>
         </>
     )
 
-    const footer = (
-        <Button
-            onClick={handleCheckout}
-            disabled={loading}
-            className="w-full py-4 flex justify-center gap-2 items-center"
-            variant="success"
-        >
-            {loading ? "در حال پردازش..." : (
-                <>
-                    <span>بررسی نهایی و پرداخت</span>
-                </>
-            )}
-        </Button>)
-
     return (
         <>
-            <ModalRoute footer={isShowRecipt ? recipientFooter : footer} header={isShowRecipt ?recipientHeader:header}>
-                {error && (
-                    <Error message={error}/>
-                )}
+            <ModalRoute footer={isShowRecipt ? recipientFooter : footer}
+                        header={isShowRecipt ? recipientHeader : header}>
+
                 <div className="mt-4"></div>
                 {
                     basketItems.length === 0 && (
@@ -206,7 +219,6 @@ export default function Basket() {
                 {
                     isShowRecipt && (
                         <>
-                            <h1 className="text-lg font-bold mb-4">رسید خرید نهایی</h1>
                             <BasketReceipt recipientData={recipient}/>
                         </>
                     )

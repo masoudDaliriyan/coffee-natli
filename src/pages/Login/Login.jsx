@@ -8,6 +8,7 @@ import {useRootNavigate} from "../../utils/RootNavigate.js";
 import Error from '../../components/Error/Error.jsx'
 import {Captcha} from "../Capcha/Captcha.jsx";
 import ModalRoute from "../../components/ModalRoute/ModalRoute.jsx";
+import SuccessMessage from "../../components/SuccessMessage/SuccessMessage.jsx";
 
 const Login = () => {
     const {login, loading} = useAuth();
@@ -54,6 +55,11 @@ const Login = () => {
     return (
         <ModalRoute header={header}>
             <div className=" md:p-8">
+                {
+                    from ==='/rest' && (
+                        <SuccessMessage message="رمز عبور جدید به شماره موبایل شما ارسال شد"></SuccessMessage>
+                    )
+                }
                 {error && (
                     <Error message={error}/>
                 )}

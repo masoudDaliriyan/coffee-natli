@@ -53,7 +53,7 @@ export default function Orders() {
     if (loading) return <div className="px-4"><DefaultSkeleton/></div>;
 
     const header = (
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">سفارشات من</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">سفارشات من</h1>
     )
 
     return (

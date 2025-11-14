@@ -27,7 +27,7 @@ function StoreInfo() {
 
     return (
         <div>
-            {loading && <div className="px-4"><DefaultSkeleton /></div>}
+            {loading && <DefaultSkeleton />}
 
             {htmlContent && (
                 <iframe

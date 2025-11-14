@@ -23,7 +23,7 @@ export const Captcha = ({ base64,onChangeCode=()=>{} }) => {
     }
 
     return (
-        <div className="flex items-end space-x-4 rtl:space-x-reverse gap-8">
+        <div className="flex items-end space-x-4 rtl:space-x-reverse gap-8 mt-2">
             <div className="flex-1 mr-0">
             <label className="block text-sm font-medium mb-1">کد امنیتی</label>
                 <TextInput

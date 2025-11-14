@@ -20,7 +20,7 @@ import OTP from "./pages/OTP/OTP.jsx";
 import Sidebar from "./pages/Main/components/SideBar/SideBar.jsx";
 import ModalRoute from "./components/ModalRoute/ModalRoute.jsx";
 import SearchableProductList from "./pages/Search/Search.jsx";
-import Rest from "./pages/Rest/Rest.jsx";
+import Rest from "./pages/Rest/Reset.jsx";
 import StoreInfo from "./pages/StoreInfo/StoreInfo.jsx";
 function NotFound()
 {

@@ -1,16 +1,10 @@
 import { useState } from "react";
 import "./basketRecipent.css";
-import Button from "../../components/Button/Button";
-import { orderAdd } from "../../services/api";
 import { useBasket } from "../../context/BasketContex.jsx";
-import { changePayloadForBackend } from "./basketUtils";
-import ErrorMessage from "../../components/Error/Error.jsx";
 
 const BasketReceipt = ({ recipientData }) =>
 {
-    const [loading, setLoading] = useState(false);
     const { items: basketItems, coupon, tableNumber } = useBasket();
-    const [error, setError] = useState("");
 
 
     function formatPrice(value)
@@ -26,9 +20,6 @@ const BasketReceipt = ({ recipientData }) =>
 
     return (
         <>
-            { error && (
-                <ErrorMessage message={ error } />
-            ) }
             <div className="max-w-md mx-auto">
                 { recipientItems.map(item => (
                     <div
@@ -43,21 +34,43 @@ const BasketReceipt = ({ recipientData }) =>
                                 </div>
                             ) }
                             <div className="mt-2">
-                                <div className="mr-2">تعداد: { item.amount }</div>
-                                <div>قیمت: { formatPrice(item.fee) } ریال</div>
+                                <div>تعداد: { item.amount }</div>
+                                {
+                                    !item.discount && (
+                                        <div>قیمت: { formatPrice(item.fee) } ریال</div>
+                                    )
+                                }
                                 { item.discount && (
                                     <>
-                                        <div>تخفیف: { item.discount }%</div>
-                                        <div>قیمت پس از تخفیف: { formatPrice(item.fee_after_discount) } ریال</div>
+                                        <div>
+                                            قیمت:
+                                            &nbsp;
+                                            <span className="line-through">{formatPrice(item.fee)} ریال </span>
+                                            &nbsp;
+                                            <span className="inline-block text-green-700 text-sm font-medium border border-green-400 rounded-[13px] px-2 py-1 bg-green-50">
+                                                {item.discount} %
+                                            </span>
+                                            &nbsp;
+                                            <span>
+                                                 {formatPrice(item.fee_after_discount) } ریال
+                                            </span>
+                                        </div>
                                     </>
                                 ) }
-                                <div>قیمت تمام شده { formatPrice(item.sum) } ریال</div>
+                                {
+                                    item.amount > 1 && (
+                                        <div>
+                                            مجموع
+                                            :
+                                            &nbsp;
+                                            { formatPrice(item.sum) } ریال</div>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
                 )) }
             </div>
-
         </>
     );
 };
