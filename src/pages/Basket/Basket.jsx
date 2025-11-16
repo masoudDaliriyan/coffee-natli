@@ -27,6 +27,8 @@ export default function Basket() {
     const params = useParams();
     const [payType, setPayType] = useState("");
     const [orderId, setOrderId] = useState(null)
+    const [imgLoading, setImgLoading] = useState(true);
+
 
     const onChangePayType = (e) => {
         setPayType(e.target.value)
@@ -114,6 +116,15 @@ export default function Basket() {
             <SuccessMessage message={"سفارش شما ثبت شد. می توانید از کیوسک مستقر در شعبه، صورتحساب خود را پرداخت نمایید."}></SuccessMessage>
             <div className="text-center">
                 شماره سفارش:  {orderId}
+            </div>
+            <div className="text-center">
+                {imgLoading && <p>در حال بارگذاری عکس...</p>}
+                <img
+                    className="mx-auto mt-2"
+                    src={`https://www.natli.ir/cws/barcode.php?text=${orderId}`}
+                    alt="بارکد سفارش"
+                    onLoad={() => setImgLoading(false)}
+                />
             </div>
         </div>
     )
