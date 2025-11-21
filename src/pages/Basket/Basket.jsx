@@ -112,9 +112,9 @@ export default function Basket() {
     )
 
     const cashier = (
-        <div className="text-2xl font-bold my-4">
+        <div className="my-4">
             <SuccessMessage message={"سفارش شما ثبت شد. می توانید از کیوسک مستقر در شعبه، صورتحساب خود را پرداخت نمایید."}></SuccessMessage>
-            <div className="text-center">
+            <div className="text-center text-2xl font-bold ">
                 شماره سفارش:  {orderId}
             </div>
             <div className="text-center">

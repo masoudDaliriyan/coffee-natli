@@ -1,9 +1,24 @@
 {
     "branches": [
-        "sohrevardi-shomali",
-        "sohrevardi-jonubi",
-        "dibaji",
-        "poonak",
-        "sohrevardi-1"
+        {
+            "name": "سهروردی شمالی",
+            "key": "sohrevardi-shomali"
+        },
+        {
+            "name": "سهروردی جنوبی",
+            "key": "sohrevardi-jonubi"
+        },
+        {
+            "name": "دیباجی",
+            "key": "dibaji"
+        },
+        {
+            "name": "پونک",
+            "key": "poonak"
+        },
+        {
+            "name": "سهروردی 1",
+            "key": "sohrevardi-1"
+        }
     ]
 }

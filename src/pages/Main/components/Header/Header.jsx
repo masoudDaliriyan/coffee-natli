@@ -7,7 +7,7 @@ import LoginIcon from '/public/icons/Login.svg';
 import HeaderImg from '/public/icons/cover.jpg';
 import { RootLink } from "../../../../components/RootLink/RootLink.jsx";
 
-export default function Header()
+export default function Header({title})
 {
     const { isAuthenticated, logout } = useAuth();
     return (
@@ -48,7 +48,7 @@ export default function Header()
                 </div>
             </div>
             <div className=" mb-5 text-center text-lg font-semibold">
-                کافه قنادی وانیلا (اقدسیه)
+                کافی شاپ ناتلی شعبه {title}
             </div>
         </>
     );

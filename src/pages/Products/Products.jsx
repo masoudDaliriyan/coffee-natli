@@ -8,10 +8,18 @@ import { useProducts } from "../../context/ProductContext.jsx";
 import { useSidebar } from "../../context/SidebarContext.jsx";
 import "react-loading-skeleton/dist/skeleton.css";
 import ProductListSkeleton from "./components/ProductLoadingSkeleton.jsx";
+import {useParams} from "react-router-dom";
+import {branches} from '../../../branches.json'
+
+function getBranchTitle(key) {
+    const branch = branches.find(b => b.key === key);
+    return branch ? branch.name : "شعبه نامشخص"; // مقدار fallback
+}
 
 
 export default function ProductsList() {
     const { products, loading } = useProducts();
+    const { unique_name, tableNumber } = useParams();
 
     const { activeItem } = useSidebar();
     const productListRef = useRef(null);
@@ -28,7 +36,7 @@ export default function ProductsList() {
     if (loading) {
         return (
             <div>
-                <Header />
+                <Header title={getBranchTitle(unique_name)} />
                 <MainContainer>
                     <ProductListSkeleton />
                 </MainContainer>
@@ -40,7 +48,7 @@ export default function ProductsList() {
     if (!products) {
         return (
             <div>
-                <Header />
+                <Header title={getBranchTitle(unique_name)} />
                 <MainContainer>
                     <div className="text-center mt-8">محصولی یافت نشد</div>
                 </MainContainer>
@@ -51,7 +59,7 @@ export default function ProductsList() {
 
     return (
         <div>
-            <Header />
+            <Header title={getBranchTitle(unique_name)} />
             <div
                 className="flex justify-center items-center mt-4 cursor-pointer"
                 onClick={scrollToProducts}

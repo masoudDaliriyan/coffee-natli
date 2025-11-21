@@ -67,10 +67,8 @@ function App()
 
     }, []);
 
-    useEffect(() =>
-    {
-        if (!branches.includes(unique_name))
-        {
+    useEffect(() => {
+        if (!branches?.some(branch => branch.key === unique_name)) {
             navigate("/404", { replace: true });
         }
     }, []);
