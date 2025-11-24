@@ -126,7 +126,7 @@ export default function Product({data}) {
                     </div>
 
                 </div>
-                <div className="w-1/2 h-full">
+                <div className="w-1/2 h-full flex justify-end">
                     <img
                         src={`https://www.natli.ir/upload/prod/md/${data.thumbnail}.jpg`}
                         className="w-auto h-[160px] object-cover rounded-lg"
