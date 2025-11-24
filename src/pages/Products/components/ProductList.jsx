@@ -3,7 +3,7 @@ import Product from "./Product.jsx";
 import Divider from "../../../components/Divider/Divider.jsx";
 import {useBasket} from "../../../context/BasketContex.jsx";
 
-export default function ProductList({ products, activeItem }) {
+export default function ProductList({ products, activeItem, isShow3Column = false }) {
     const categoryRefs = useRef({});
     const {} = useBasket()
 
@@ -23,7 +23,7 @@ export default function ProductList({ products, activeItem }) {
 
 
     return (
-        <div style={{maxWidth:'500px',margin:'0 auto'}}>
+        <div>
             {products.cats.map((cat) => (
                 <div
                     key={cat.cat_id}
@@ -31,7 +31,9 @@ export default function ProductList({ products, activeItem }) {
                     className="mb-6"
                 >
                     <Divider>{cat.cat_title}</Divider>
-                    <div className="grid grid-cols-1  gap-4 mt-4 mb-20">
+                    <div
+                        className={`grid gap-4 mt-4 mb-20  grid-cols-1 ${isShow3Column ? "md:grid-cols-3" : "md:grid-cols-1"}`}
+                    >
                         {products.prods
                             .filter((p) => p.cat_id === cat.cat_id)
                             .map((product) => (

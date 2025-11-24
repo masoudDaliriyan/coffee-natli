@@ -18,6 +18,8 @@ export default function Product({data}) {
         getExtraById
     } = useBasket();
     const basketItem = getItem(data.id);
+    data.availabl= Math.random() > 0.5 ? "1" : "0";
+
 
 
     const normalizeValue = (value) => {
@@ -80,31 +82,47 @@ export default function Product({data}) {
                         )}
                     </div>
 
-
                     <div className="flex mt-3">
-                        {!isItemExist(data.id) ? (
-                            <Button
-                                className="max-w-[90px] text-center ml-2"
-                                onClick={handleAddToBasket}
-                            >
-                                افزودن
-                            </Button>
-                        ) : (
-                            <>
+                        {
+                            data.available === "0" && (
                                 <Button
-                                    className="max-w-[120px] text-center ml-2"
-                                    variant="secondary"
-                                    onClick={handleRemoveFromBasket}
+                                    className="max-w-[90px] text-center ml-2"
                                 >
-                                    حذف
+                                    ناموجود
                                 </Button>
-                                <Counter
-                                    id={data.id}
-                                    quantity={basketItem?.quantity || 1}
-                                    onChange={(id, newQty) => updateQuantity(id, newQty)}
-                                />
-                            </>
-                        )}
+                            )
+                        }
+                    </div>
+                    <div className="flex mt-3">
+                        {
+                            (!isItemExist(data.id) && data.available !== "0")  && (
+                                <Button
+                                    className="max-w-[90px] text-center ml-2"
+                                    onClick={handleAddToBasket}
+                                >
+                                    افزودن
+                                </Button>
+                            )
+                        }
+                        {
+                            isItemExist(data.id)  && (
+                                <>
+                                    <Button
+                                        className="max-w-[120px] text-center ml-2"
+                                        variant="secondary"
+                                        onClick={handleRemoveFromBasket}
+                                    >
+                                        حذف
+                                    </Button>
+                                    <Counter
+                                        id={data.id}
+                                        quantity={basketItem?.quantity || 1}
+                                        onChange={(id, newQty) => updateQuantity(id, newQty)}
+                                    />
+                                </>
+                            )
+
+                        }
                     </div>
 
                 </div>

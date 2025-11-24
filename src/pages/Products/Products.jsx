@@ -68,7 +68,7 @@ export default function ProductsList() {
             </div>
             <MainContainer>
                 <div ref={productListRef}>
-                    <ProductList products={products} activeItem={activeItem} />
+                    <ProductList products={products} activeItem={activeItem} isShow3Column={true}/>
                 </div>
                 <Footer />
             </MainContainer>
