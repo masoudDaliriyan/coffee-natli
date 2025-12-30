@@ -51,7 +51,7 @@ const Signup = () =>
             setTimeout(() => rootNavigate(`/otp/${ form.mobile }?from=${ from }`), 1500);
         } else
         {
-            if (res.data.data.captchaBase64)
+            if (res.data.data?.captchaBase64)
             {
                 setCaptchaBase64(res.data.data.captchaBase64);
             }
